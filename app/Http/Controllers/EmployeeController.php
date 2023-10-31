@@ -21,7 +21,7 @@ class EmployeeController extends Controller
     public function index()
     {
         $data['title']     = 'Employee Information';
-        $data['employees'] = Employee::all();
+        $data['employees'] = Employee::orderBy('id', 'desc')->get();
         $title             = 'Delete Employee!';
         $text              = "Are you sure you want to delete?";
         confirmDelete($title, $text);

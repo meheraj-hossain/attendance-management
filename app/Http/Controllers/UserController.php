@@ -21,7 +21,7 @@ class UserController extends Controller
     public function index()
     {
         $data['title'] = 'User Information';
-        $data['users'] = User::all();
+        $data['users'] = User::orderBy('id', 'desc')->get();
         $title         = 'Delete User!';
         $text          = "Are you sure you want to delete?";
         confirmDelete($title, $text);
