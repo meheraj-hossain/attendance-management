@@ -11,12 +11,12 @@
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
-                <form role="form" action="{{route('employees.store')}}" method="post" enctype="multipart/form-data">
+                <form role="form" action="{{route('employees.update', $employee->id)}}" method="post"
+                      enctype="multipart/form-data">
                     @csrf
-
+                    @method('put')
                     <div class="card-body">
                         @include('admin.layouts.employees._form')
-
                     </div>
                     <!-- /.card-body -->
 

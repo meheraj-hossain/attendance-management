@@ -6,10 +6,10 @@
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
     <!-- Preloader -->
-    <div class="preloader flex-column justify-content-center align-items-center">
-        <img class="animation__shake" src="{{ asset('dashboard/dist/img/AdminLTELogo.png') }}" alt="AdminLTELogo"
-             height="60" width="60">
-    </div>
+{{--    <div class="preloader flex-column justify-content-center align-items-center">--}}
+{{--        <img class="animation__shake" src="{{ asset('dashboard/dist/img/AdminLTELogo.png') }}" alt="Attendance Management System Logo"--}}
+{{--             height="60" width="60">--}}
+{{--    </div>--}}
 
     <!-- Navbar -->
     @include('admin.templates._header')
@@ -40,6 +40,8 @@
 <!-- js -->
 @include('admin.templates._js')
 <!-- /js -->
+
+@include('sweetalert::alert')
 </body>
 </html>
 

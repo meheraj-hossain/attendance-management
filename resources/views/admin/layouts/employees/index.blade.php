@@ -13,501 +13,70 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">DataTable with default features</h3>
+                    <h3 class="card-title float-lg-left d-lg-flex align-items-lg-center">
+                        {{ $title }}
+                    </h3>
+                    <a href="{{ route('employees.create') }}" class="btn btn-info btn-sm float-lg-right"> Add New
+                        Info</a>
+
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
                         <tr>
-                            <th>Rendering engine</th>
-                            <th>Browser</th>
-                            <th>Platform(s)</th>
-                            <th>Engine version</th>
+                            <th>Serial</th>
+                            <th>Employee ID</th>
+                            <th>Employee Name</th>
+                            <th>Employee Email</th>
+                            <th>Employee Designation</th>
+                            <th>Employee Department</th>
+                            <th>Employee Status</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-primary mx-1">Edit</a>
-                                <a href="#" class="btn btn-danger mx-1">Delete</a>
-                            </td>
-                        </tr>
+                        @if($employees->count() > 0)
+                            @foreach($employees as $key =>$employee)
+                                <tr>
+                                    <td>{{ ++$key }}</td>
+                                    <td> {{ $employee->employee_id }}
+                                    </td>
+                                    <td>{{ $employee->employee_name }}</td>
+                                    <td>{{ $employee->employee_email }}</td>
+                                    <td>{{ $employee->employee_designation }}</td>
+                                    <td>{{ $employee->employee_department }}</td>
+                                    <td class="d-lg-flex justify-content-lg-center">
+                                        @if($employee->employee_status == \App\Models\Admin\Employee::STATUS_ACTIVE)
+                                            <span class="badge badge-success"> <i class="fa-solid fa-shield-check"></i> {{ \App\Models\Admin\Employee::STATUS[$employee->employee_status] }}</span>
+                                        @elseif( $employee->employee_status == \App\Models\Admin\Employee::STATUS_INACTIVE)
+                                            <span
+                                                class="badge badge-danger"> {{ \App\Models\Admin\Employee::STATUS[$employee->employee_status] }}</span>
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{{ route('employees.edit', $employee->id) }}"
+                                           class="btn btn-info btn-sm"><i class="fas fa-edit nav-icon"></i>Edit</a>
+                                        {{--                                        <form action="{{ route('employees.destroy') }}" method="post"--}}
+                                        {{--                                              style="display:inline">--}}
+                                        {{--                                            @csrf--}}
+                                        {{--                                            @method('delete')--}}
+                                        {{--                                            <input type="hidden" name="id" value="{{ $employee->id }}">--}}
+                                        {{--                                            <button title="Delete" type="submit" class="btn btn-danger btn-sm"--}}
+                                        {{--                                                    data-confirm-delete="true">--}}
+                                        {{--                                                <i class="fa fa-trash-alt nav-icon"></i>--}}
+                                        {{--                                                Delete--}}
+                                        {{--                                            </button>--}}
+                                        {{--                                        </form>--}}
+                                        <a href="{{ route('employees.destroy', $employee->id) }}"
+                                           class="btn btn-danger btn-sm" data-confirm-delete="true"><i
+                                                class="fa fa-trash-alt nav-icon"></i>Delete</a>
+
+
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endif
                         </tbody>
                     </table>
                 </div>
@@ -546,3 +115,8 @@
     </script>
 @endpush
 
+{{--select b.user_id,b.month_name,sum(1) days_attended from(--}}
+{{--select a.user_id,event_date, DATEPART(mm,event_date) month_name from (--}}
+{{--select user_id, cast(event_time as date)  event_date from auth_logs_202310) a--}}
+{{--group by user_id ,event_date--}}
+{{--) b  group by user_id,month_name--}}
