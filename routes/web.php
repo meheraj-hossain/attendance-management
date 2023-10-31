@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\EmployeeController;
+use \App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,8 @@ Route::prefix('admin')->group(function () {
     Route::get('employees/edit/{employee}', [EmployeeController::class, 'edit'])->name('employees.edit');
     Route::put('employees/update/{employee}', [EmployeeController::class, 'update'])->name('employees.update');
     Route::delete('employees/delete/{employee}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
+
+    Route::resource('users', UserController::class);
 
     Route::get('reports/daily-reports', function () {
         return view('admin.layouts.reports.daily_reports');

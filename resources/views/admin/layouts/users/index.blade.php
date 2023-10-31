@@ -1,7 +1,7 @@
 @extends('admin.templates.master')
 
 @php
-    use \App\Models\Admin\Employee
+    use \App\Models\User
 @endphp
 
 @push('css')
@@ -20,8 +20,8 @@
                     <h3 class="card-title float-lg-left d-lg-flex align-items-lg-center">
                         {{ $title }}
                     </h3>
-                    <a href="{{ route('employees.create') }}" class="btn btn-info btn-sm float-lg-right"> Add New
-                        Employee Info</a>
+                    <a href="{{ route('users.create') }}" class="btn btn-info btn-sm float-lg-right"> Add New
+                        User Info</a>
 
                 </div>
                 <!-- /.card-header -->
@@ -30,50 +30,39 @@
                         <thead>
                         <tr>
                             <th>Serial</th>
-                            <th>Employee ID</th>
-                            <th>Employee Name</th>
-                            <th>Employee Email</th>
-                            <th>Employee Designation</th>
-                            <th>Employee Department</th>
-                            <th>Employee Status</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
-                        @if($employees->count() > 0)
-                            @foreach($employees as $key =>$employee)
+                        @if($users->count() > 0)
+                            @foreach($users as $key =>$user)
                                 <tr>
                                     <td>{{ ++$key }}</td>
-                                    <td> {{ $employee->employee_id }}
-                                    </td>
-                                    <td>{{ $employee->employee_name }}</td>
-                                    <td>{{ $employee->employee_email }}</td>
-                                    <td>{{ $employee->employee_designation }}</td>
-                                    <td>{{ $employee->employee_department }}</td>
-                                    <td class="d-lg-flex justify-content-lg-center">
+                                    <td> {{ $user->name }}</td>
+                                    <td>{{ $user->email }}</td>
+                                    <td>
                                         <span
-                                            class="badge {{ ($employee->employee_status == Employee::STATUS_ACTIVE) ? 'badge-success' : 'badge-danger' }}">{{ Employee::STATUS[$employee->employee_status] }}
+                                            class="badge badge-info">{{ User::ROLE[$user->role] }}
                                         </span>
                                     </td>
+
+                                    <td class="d-lg-flex justify-content-lg-center">
+                                        <span
+                                            class="badge {{ ($user->status == User::STATUS_ACTIVE) ? 'badge-success' : 'badge-danger' }}">{{ User::STATUS[$user->status] }}
+                                        </span>
+                                    </td>
+
+
                                     <td class="text-center">
-                                        <a href="{{ route('employees.edit', $employee->id) }}"
+                                        <a href="{{ route('users.edit', $user->id) }}"
                                            class="btn btn-info btn-sm"><i class="fas fa-edit nav-icon"></i>Edit</a>
-                                        {{--                                        <form action="{{ route('employees.destroy') }}" method="post"--}}
-                                        {{--                                              style="display:inline">--}}
-                                        {{--                                            @csrf--}}
-                                        {{--                                            @method('delete')--}}
-                                        {{--                                            <input type="hidden" name="id" value="{{ $employee->id }}">--}}
-                                        {{--                                            <button title="Delete" type="submit" class="btn btn-danger btn-sm"--}}
-                                        {{--                                                    data-confirm-delete="true">--}}
-                                        {{--                                                <i class="fa fa-trash-alt nav-icon"></i>--}}
-                                        {{--                                                Delete--}}
-                                        {{--                                            </button>--}}
-                                        {{--                                        </form>--}}
-                                        <a href="{{ route('employees.destroy', $employee->id) }}"
+                                        <a href="{{ route('users.destroy', $user->id) }}"
                                            class="btn btn-danger btn-sm" data-confirm-delete="true"><i
                                                 class="fa fa-trash-alt nav-icon"></i>Delete</a>
-
-
                                     </td>
                                 </tr>
                             @endforeach

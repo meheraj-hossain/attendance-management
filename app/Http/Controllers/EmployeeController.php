@@ -22,7 +22,7 @@ class EmployeeController extends Controller
     {
         $data['title']     = 'Employee Information';
         $data['employees'] = Employee::all();
-        $title             = 'Delete User!';
+        $title             = 'Delete Employee!';
         $text              = "Are you sure you want to delete?";
         confirmDelete($title, $text);
         return view('admin.layouts.employees.index', $data);

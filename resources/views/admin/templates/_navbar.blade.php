@@ -150,7 +150,7 @@
 
                 <li class="nav-item has-treeview {{ (request()->routeIs('reports.*') ? 'menu-open' : null ) }}">
                     <a href="#" class="nav-link {{ (request()->routeIs('reports.*') ? 'active' : null ) }}">
-                        <i class="nav-icon fas fa-user"></i>
+                        <i class="nav-icon fas fa-file-alt"></i>
                         <p>
                             Reports
                             <i class="right fas fa-angle-left"></i>
@@ -169,6 +169,25 @@
                                class="nav-link {{ (request()->routeIs('reports.monthly') ? 'active' : null ) }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Monthly Reports</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item has-treeview {{ (request()->routeIs('users.*') ? 'menu-open' : null ) }}">
+                    <a href="#" class="nav-link {{ (request()->routeIs('users.*') ? 'active' : null ) }}">
+                        <i class="nav-icon fas fa-cog"></i>
+                        <p>
+                            Settings
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('users.index') }}"
+                               class="nav-link {{ (request()->routeIs('users.index') ? 'active' : null ) }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Users</p>
                             </a>
                         </li>
                     </ul>
