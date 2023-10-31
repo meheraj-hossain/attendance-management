@@ -6,10 +6,10 @@
 
 @push('css')
     <!-- DataTables -->
-    <link rel="stylesheet" href="{{ asset('dashboard/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet"
-          href="{{ asset('dashboard/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('dashboard/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+          href="{{ asset('admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 @endpush
 
 @section('content')
@@ -32,9 +32,9 @@
                             <th>Serial</th>
                             <th>Name</th>
                             <th>Email</th>
-                            <th>Role</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th class="text-center">Role</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">Action</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -44,7 +44,7 @@
                                     <td>{{ ++$key }}</td>
                                     <td> {{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
-                                    <td>
+                                    <td class="text-center">
                                         <span
                                             class="badge badge-info">{{ User::ROLE[$user->role] }}
                                         </span>
@@ -81,18 +81,18 @@
 
 @push('js')
     <!-- DataTables  & Plugins -->
-    <script src="{{ asset('dashboard/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('dashboard/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('dashboard/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('dashboard/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('dashboard/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('dashboard/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('dashboard/plugins/jszip/jszip.min.js') }}"></script>
-    <script src="{{ asset('dashboard/plugins/pdfmake/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('dashboard/plugins/pdfmake/vfs_fonts.js') }}"></script>
-    <script src="{{ asset('dashboard/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-    <script src="{{ asset('dashboard/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('dashboard/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+    <script src="{{ asset('admin/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('admin/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('admin/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('admin/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('admin/plugins/jszip/jszip.min.js') }}"></script>
+    <script src="{{ asset('admin/plugins/pdfmake/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('admin/plugins/pdfmake/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('admin/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('admin/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('admin/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 
     <!-- Page specific script -->
     <script>

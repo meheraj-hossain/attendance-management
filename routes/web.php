@@ -19,19 +19,26 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::prefix('admin')->group(function () {
+Route::get('/unauthorized', function () {
+    dd('You do not have access to this link');
+})->name('unauthorized');
+
+Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('dashboard', function () {
         return view('dashboard.dashboard');
     })->name('dashboard');
 
-    Route::get('employees', [EmployeeController::class, 'index'])->name('employees.index');
-    Route::get('employees/create', [EmployeeController::class, 'create'])->name('employees.create');
-    Route::post('employees/store', [EmployeeController::class, 'store'])->name('employees.store');
-    Route::get('employees/edit/{employee}', [EmployeeController::class, 'edit'])->name('employees.edit');
-    Route::put('employees/update/{employee}', [EmployeeController::class, 'update'])->name('employees.update');
-    Route::delete('employees/delete/{employee}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
+    Route::middleware('role:'.\App\Models\User::ROLE_SUPER_ADMIN)->group(function () {
+        Route::resource('users', UserController::class);
 
-    Route::resource('users', UserController::class);
+        Route::get('employees', [EmployeeController::class, 'index'])->name('employees.index');
+        Route::get('employees/create', [EmployeeController::class, 'create'])->name('employees.create');
+        Route::post('employees/store', [EmployeeController::class, 'store'])->name('employees.store');
+        Route::get('employees/edit/{employee}', [EmployeeController::class, 'edit'])->name('employees.edit');
+        Route::put('employees/update/{employee}', [EmployeeController::class, 'update'])->name('employees.update');
+        Route::delete('employees/delete/{employee}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
+    });
+
 
     Route::get('reports/daily-reports', function () {
         return view('admin.layouts.reports.daily_reports');

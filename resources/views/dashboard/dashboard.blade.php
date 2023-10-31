@@ -2,13 +2,14 @@
 
 @push('css')
     <!-- JQVMap -->
-    <link rel="stylesheet" href="{{ asset('dashboard/plugins/jqvmap/jqvmap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/plugins/jqvmap/jqvmap.min.css') }}">
     <!-- summernote -->
-    <link rel="stylesheet" href="{{ asset('dashboard/plugins/summernote/summernote-bs4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/plugins/summernote/summernote-bs4.min.css') }}">
 @endpush
 
 @section('content')
     <!-- Small boxes (Stat box) -->
+
     <div class="row">
         <div class="col-lg-3 col-6">
             <!-- small box -->
@@ -615,25 +616,25 @@
         $.widget.bridge('uibutton', $.ui.button)
     </script>
     <!-- AdminLTE for demo purposes -->
-    <script src="{{ asset('dashboard/dist/js/pages/dashboard.js') }}"></script>
+    <script src="{{ asset('admin/dist/js/pages/dashboard.js') }}"></script>
     <!-- ChartJS -->
-    <script src="{{ asset('dashboard/plugins/chart.js/Chart.min.js') }}"></script>
+    <script src="{{ asset('admin/plugins/chart.js/Chart.min.js') }}"></script>
     <!-- Sparkline -->
-    <script src="{{ asset('dashboard/plugins/sparklines/sparkline.js') }}"></script>
+    <script src="{{ asset('admin/plugins/sparklines/sparkline.js') }}"></script>
     <!-- JQVMap -->
-    <script src="{{ asset('dashboard/plugins/jqvmap/jquery.vmap.min.js') }}"></script>
-    <script src="{{ asset('dashboard/plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
+    <script src="{{ asset('admin/plugins/jqvmap/jquery.vmap.min.js') }}"></script>
+    <script src="{{ asset('admin/plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
     <!-- jQuery Knob Chart -->
-    <script src="{{ asset('dashboard/plugins/jquery-knob/jquery.knob.min.js') }}"></script>
+    <script src="{{ asset('admin/plugins/jquery-knob/jquery.knob.min.js') }}"></script>
     <!-- daterangepicker -->
-    <script src="{{ asset('dashboard/plugins/moment/moment.min.js') }}"></script>
-    <script src="{{ asset('dashboard/plugins/daterangepicker/daterangepicker.js') }}"></script>
+    <script src="{{ asset('admin/plugins/moment/moment.min.js') }}"></script>
+    <script src="{{ asset('admin/plugins/daterangepicker/daterangepicker.js') }}"></script>
     <!-- Tempusdominus Bootstrap 4 -->
     <script
-        src="{{ asset('dashboard/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+        src="{{ asset('admin/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
     <!-- Summernote -->
-    <script src="{{ asset('dashboard/plugins/summernote/summernote-bs4.min.js') }}"></script>
+    <script src="{{ asset('admin/plugins/summernote/summernote-bs4.min.js') }}"></script>
     <!-- overlayScrollbars -->
-    <script src="{{ asset('dashboard/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
+    <script src="{{ asset('admin/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
 @endpush
 
