@@ -105,8 +105,4 @@
     </script>
 @endpush
 
-{{--select b.user_id,b.month_name,sum(1) days_attended from(--}}
-{{--select a.user_id,event_date, DATEPART(mm,event_date) month_name from (--}}
-{{--select user_id, cast(event_time as date)  event_date from auth_logs_202310) a--}}
-{{--group by user_id ,event_date--}}
-{{--) b  group by user_id,month_name--}}
+

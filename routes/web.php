@@ -28,7 +28,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
         return view('dashboard.dashboard');
     })->name('dashboard');
 
-    Route::middleware('role:'.\App\Models\User::ROLE_SUPER_ADMIN)->group(function () {
+    Route::middleware('role:' . \App\Models\User::ROLE_SUPER_ADMIN)->group(function () {
         Route::resource('users', UserController::class);
 
         Route::get('employees', [EmployeeController::class, 'index'])->name('employees.index');
@@ -39,11 +39,11 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
         Route::delete('employees/delete/{employee}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
     });
 
-
     Route::get('reports/daily-reports', function () {
         return view('admin.layouts.reports.daily_reports');
     })->name('reports.daily');
-    Route::get('reports/monthly-reports', function () {
-        return view('admin.layouts.reports.monthly_reports');
-    })->name('reports.monthly');
+
+    Route::get('reports/monthly-reports', [
+        \App\Http\Controllers\ReportController::class, 'monthly_attendance'
+    ])->name('reports.monthly');
 });
