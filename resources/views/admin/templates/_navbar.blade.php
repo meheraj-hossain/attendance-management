@@ -187,7 +187,7 @@
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a href="{{ route('users.index') }}"
-                               class="nav-link {{ (request()->routeIs('users.index') ? 'active' : null ) }}">
+                               class="nav-link {{ (request()->routeIs('users.*') ? 'active' : null ) }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Users</p>
                             </a>

@@ -81,8 +81,9 @@ return [
         'odbc' => [
             'driver'   => 'odbc',
             'dsn'      => 'sqlsrv:Server=SERVER-ATTENDAN,1433;Database=UCDB',
-            //            'host'     => '192.168.1.15',
-            'database' => 'attendance',
+            'host'     => '',
+            'port'     => '',
+            'database' => '',
             'username' => 'sa',
             'password' => 'bat1#',
         ],

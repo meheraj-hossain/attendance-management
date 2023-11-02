@@ -20,7 +20,8 @@ Route::get('/', function () {
 });
 
 Route::get('/unauthorized', function () {
-    dd('You do not have access to this link');
+    $data['title'] = 'Unauthorized';
+    return view('admin.layouts.errors.unauthorized', $data);
 })->name('unauthorized');
 
 Route::prefix('admin')->middleware(['auth'])->group(function () {
