@@ -83,7 +83,7 @@ return [
             'dsn'      => 'sqlsrv:Server=SERVER-ATTENDAN,1433;Database=UCDB',
             'host'     => '',
             'port'     => '',
-            'database' => '',
+            'database' => 'UCDB',
             'username' => 'sa',
             'password' => 'bat1#',
         ],

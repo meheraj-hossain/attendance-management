@@ -17,34 +17,34 @@ class ReportController extends Controller
 //        $sql              = 'select a.user_id, max(event_time),event_date from (select user_id, event_time, cast(event_time as date)  event_date from auth_logs_202310 where user_id = ' . $id . ') a group by event_date,user_id';
     }
 
-    public function monthly_attendance()
-    {
-        //total days attended
-        $data = DB::connection('odbc')
-                  ->select("SELECT
-    b.user_id,
-    MAX(b.user_name) AS user_name,
-    b.month_name,
-    COUNT(DISTINCT CAST(b.server_record_time AS DATE)) AS days_attended
-FROM (
-    SELECT
-        a.user_id,
-        MAX(a.user_name) AS user_name,
-        server_record_time,
-        DATEPART(mm, server_record_time) AS month_name
-    FROM (
-        SELECT
-            user_id,
-            user_name,
-            CAST(server_record_time AS DATETIME) AS server_record_time
-        FROM auth_logs_202311
-    ) a
-    GROUP BY a.user_id, a.server_record_time
-) b
-GROUP BY b.user_id, b.month_name
-ORDER BY b.month_name ASC");
+//    public function monthly_attendance()
+//    {
+    //total days attended
+//        $data = DB::connection('odbc')
+//                  ->select("SELECT
+//    b.user_id,
+//    MAX(b.user_name) AS user_name,
+//    b.month_name,
+//    COUNT(DISTINCT CAST(b.server_record_time AS DATE)) AS days_attended
+//FROM (
+//    SELECT
+//        a.user_id,
+//        MAX(a.user_name) AS user_name,
+//        server_record_time,
+//        DATEPART(mm, server_record_time) AS month_name
+//    FROM (
+//        SELECT
+//            user_id,
+//            user_name,
+//            CAST(server_record_time AS DATETIME) AS server_record_time
+//        FROM auth_logs_202311
+//    ) a
+//    GROUP BY a.user_id, a.server_record_time
+//) b
+//GROUP BY b.user_id, b.month_name
+//ORDER BY b.month_name ASC");
 
-        //First IN
+    //First IN
 //        $dateToSearch = '2023-10-30';
 //
 //        $data1 = DB::connection('odbc')->select("SELECT TOP 1 server_record_time
@@ -54,7 +54,7 @@ ORDER BY b.month_name ASC");
 //AND CONVERT(DATE, server_record_time) = :dateToSearch
 //ORDER BY server_record_time", ['dateToSearch' => $dateToSearch]);
 
-        //Last OUT
+    //Last OUT
 //        $dateToSearch = '2023-10-30'; // The date you want to search for
 
 //        $data2 = DB::connection('odbc')->select("SELECT TOP 1 server_record_time
@@ -64,8 +64,8 @@ ORDER BY b.month_name ASC");
 //AND CONVERT(DATE, server_record_time) = :dateToSearch
 //ORDER BY server_record_time DESC", ['dateToSearch' => $dateToSearch]);
 
-        //Total Hours Worked
-        // Assuming you have the two queries already stored in $data1 and $data2
+    //Total Hours Worked
+    // Assuming you have the two queries already stored in $data1 and $data2
 //        $time_in = new \DateTime($data1[0]->server_record_time);
 //        $time_out = new \DateTime($data2[0]->server_record_time);
 
@@ -76,7 +76,49 @@ ORDER BY b.month_name ASC");
 //        $hours_worked = $time_difference->h;
 //        $minutes_worked = $time_difference->i;
 
+//        $databaseName = DB::connection('odbc')->select("SELECT table_name
+//FROM information_schema.tables
+//WHERE table_name LIKE 'auth_logs_%'");
+//        $tableNames = DB::select("
+//        SELECT table_name
+//        FROM information_schema.tables
+//        WHERE table_name LIKE 'auth_logs_%' AND table_catalog = '$databaseName'
+//    ");
+//        $monthNames = app('TableNameToMonthName')->getMonthNamesFromDatabase();
+//        $monthNames = app('TableNameToMonthName')->getMonthNameFromDatabase();
 
-    dd($data);
+//    }
+
+    public function monthly_attendance($monthName)
+    {
+        $yearMonth     = convertMonthNameToYearMonth($monthName);
+        $data['title'] = 'Monthly Attendance Report of ' . $monthName;
+//    total days attended
+        $data['monthly_attendance_reports'] = DB::connection('odbc')
+                                                ->select("SELECT
+                                                                b.user_id,
+                                                                MAX(b.user_name) AS user_name,
+                                                                b.month_name,
+                                                                COUNT(DISTINCT CAST(b.server_record_time AS DATE)) AS days_attended
+                                                                FROM (
+                                                                        SELECT
+                                                                        a.user_id,
+                                                                        MAX(a.user_name) AS user_name,
+                                                                        server_record_time,
+                                                                        DATEPART(mm, server_record_time) AS month_name
+                                                                        FROM (
+                                                                                SELECT
+                                                                                user_id,
+                                                                                user_name,
+                                                                                CAST(server_record_time AS DATETIME) AS server_record_time
+                                                                                FROM auth_logs_$yearMonth
+                                                                            ) a
+                                                                                GROUP BY a.user_id, a.server_record_time
+                                                                    ) b
+                                                                    GROUP BY b.user_id, b.month_name
+                                                                    ORDER BY b.month_name ASC");
+
+        return view('admin.layouts.reports.monthly_attendance', $data);
     }
+
 }

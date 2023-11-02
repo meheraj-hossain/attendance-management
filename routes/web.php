@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\EmployeeController;
 use \App\Http\Controllers\UserController;
+use \App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,11 +41,13 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
         Route::delete('employees/delete/{employee}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
     });
 
-    Route::get('reports/daily-reports', function () {
-        return view('admin.layouts.reports.daily_reports');
-    })->name('reports.daily');
+//    Route::get('reports/da', function () {
+//        return view('admin.layouts.reports.daily_reports');
+//    })->name('reports.daily');
+//
+//    Route::get('reports', [
+//        \App\Http\Controllers\ReportController::class, 'monthly_attendance'
+//    ])->name('reports.monthly');
 
-    Route::get('reports/monthly-reports', [
-        \App\Http\Controllers\ReportController::class, 'monthly_attendance'
-    ])->name('reports.monthly');
+    Route::get('reports/monthly-attendance/{monthName}', [ReportController::class , 'monthly_attendance'])->name('reports.monthly.attendance');
 });

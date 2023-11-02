@@ -1,3 +1,7 @@
+@php
+    $monthNames = app('TableNameToMonthName')->getMonthNameFromDatabase();
+@endphp
+
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="{{ route('dashboard') }}" class="brand-link">
@@ -150,31 +154,31 @@
                     </ul>
                 </li>
 
-                <li class="nav-item has-treeview {{ (request()->routeIs('reports.*') ? 'menu-open' : null ) }}">
-                    <a href="#" class="nav-link {{ (request()->routeIs('reports.*') ? 'active' : null ) }}">
-                        <i class="nav-icon fas fa-file-alt"></i>
-                        <p>
-                            Reports
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('reports.daily') }}"
-                               class="nav-link {{ (request()->routeIs('reports.daily') ? 'active' : null ) }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Daily Reports</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('reports.monthly') }}"
-                               class="nav-link {{ (request()->routeIs('reports.monthly') ? 'active' : null ) }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Monthly Reports</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+{{--                <li class="nav-item has-treeview {{ (request()->routeIs('reports.*') ? 'menu-open' : null ) }}">--}}
+{{--                    <a href="#" class="nav-link {{ (request()->routeIs('reports.*') ? 'active' : null ) }}">--}}
+{{--                        <i class="nav-icon fas fa-file-alt"></i>--}}
+{{--                        <p>--}}
+{{--                            Reports--}}
+{{--                            <i class="right fas fa-angle-left"></i>--}}
+{{--                        </p>--}}
+{{--                    </a>--}}
+{{--                    <ul class="nav nav-treeview">--}}
+{{--                        <li class="nav-item">--}}
+{{--                            <a href="{{ route('reports.daily') }}"--}}
+{{--                               class="nav-link {{ (request()->routeIs('reports.daily') ? 'active' : null ) }}">--}}
+{{--                                <i class="far fa-circle nav-icon"></i>--}}
+{{--                                <p>Daily Reports</p>--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
+{{--                        <li class="nav-item">--}}
+{{--                            <a href="{{ route('reports.monthly') }}"--}}
+{{--                               class="nav-link {{ (request()->routeIs('reports.monthly') ? 'active' : null ) }}">--}}
+{{--                                <i class="far fa-circle nav-icon"></i>--}}
+{{--                                <p>Monthly Reports</p>--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
+{{--                    </ul>--}}
+{{--                </li>--}}
 
                 <li class="nav-item has-treeview {{ (request()->routeIs('users.*') ? 'menu-open' : null ) }}">
                     <a href="#" class="nav-link {{ (request()->routeIs('users.*') ? 'active' : null ) }}">
@@ -191,6 +195,57 @@
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Users</p>
                             </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item has-treeview {{ (request()->routeIs('reports.*') ? 'menu-open' : null ) }}">
+                    <a href="#" class="nav-link {{ (request()->routeIs('reports.*') ? 'active' : null ) }}">
+                        <i class="nav-icon fas fa-file-alt"></i>
+                        <p>
+                            Reports
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item {{ (request()->routeIs('reports.monthly.attendance') ? 'menu-open' : null ) }}">
+                            <a href="#" class="nav-link has-treeview {{ (request()->routeIs('reports.monthly.attendance') ? 'active' : null ) }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>
+                                    Monthly Attendance
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                @foreach($monthNames as $monthName)
+                                    <li class="nav-item">
+                                        <a href="{{ route('reports.monthly.attendance', $monthName) }}" class="nav-link {{ ( str_contains(request()->fullUrl(), $monthName )) ? 'active' : null  }}">
+                                            <i class="fas fa-calendar-check nav-icon"></i>
+                                            <p>
+                                                {{ $monthName }}
+                                            </p>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>
+                                    Login &amp; Register v2
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview" style="display: none;">
+                                <li class="nav-item">
+                                    <a href="pages/examples/login-v2.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Login v2</p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </li>
