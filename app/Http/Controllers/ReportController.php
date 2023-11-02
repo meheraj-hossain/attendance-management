@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin\Employee;
 use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller

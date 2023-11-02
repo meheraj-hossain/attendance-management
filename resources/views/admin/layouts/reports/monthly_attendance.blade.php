@@ -35,7 +35,14 @@
                                 </td>
                                 <td>
                                     <b>
-                                        {{ $monthly_attendance_report->user_name }}
+                                        @if($monthly_attendance_report->user_name == "")
+                                            @php
+                                                $employee_name = \App\Models\Admin\Employee::where('employee_id', $monthly_attendance_report->user_id)->pluck('employee_name')->first()
+                                            @endphp
+                                            {{ $employee_name }}
+                                        @else
+                                            {{ $monthly_attendance_report->user_name }}
+                                        @endif
                                     </b>
                                 </td>
                                 <td>
