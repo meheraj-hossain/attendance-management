@@ -11,9 +11,12 @@ class TableNameToMonthName
 {
     public function getMonthNameFromDatabase()
     {
-        $tableNames = DB::connection('odbc')->select("SELECT table_name
+        $allTableNames = DB::connection('odbc')->select("SELECT table_name
                                                             FROM information_schema.tables
                                                             WHERE table_name LIKE 'auth_logs_%'");
+
+        $reverseTableNames =array_reverse($allTableNames);
+        $tableNames = array_slice($reverseTableNames, 0, 2);
         $monthNames = [];
 
         foreach ($tableNames as $table) {
@@ -24,21 +27,9 @@ class TableNameToMonthName
                 $year  = $matches[1];
                 $month = $matches[2];
 
-                // Calculate the current year and month
-                $currentYear  = date('Y');
-                $currentMonth = date('m');
-
-                // Calculate the year and month for the last two months
-                $lastMonth = date('m', strtotime('-1 month'));
-                $lastYear  = date('Y');
-
-                // Check if the table is for the last two months
-                if (($year == $currentYear && $month >= $lastMonth) || ($year == $lastYear && $month >= $lastMonth)) {
-                    $date      = new \DateTime("{$year}-{$month}-01");
-                    $monthName = $date->format('F-Y');
-
-                    $monthNames[$tableName] = $monthName;
-                }
+                $date      = new \DateTime("{$year}-{$month}-01");
+                $monthName = $date->format('F-Y');
+                $monthNames[$tableName] = $monthName;
             }
         }
         return $monthNames;
