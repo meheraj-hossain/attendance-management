@@ -156,7 +156,7 @@ class ReportController extends Controller
     public function user_attendance(Request $request)
     {
         $query = '';
-
+        $dateQuery          = '';
         $monthQuery = $request->month;
 
         if ($request->date_from) {
