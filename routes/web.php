@@ -41,13 +41,13 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
         Route::delete('employees/delete/{employee}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
     });
 
-//    Route::get('reports/da', function () {
-//        return view('admin.layouts.reports.daily_reports');
-//    })->name('reports.daily');
-//
-//    Route::get('reports', [
-//        \App\Http\Controllers\ReportController::class, 'monthly_attendance'
-//    ])->name('reports.monthly');
-
-    Route::get('reports/monthly-attendance/{monthName}', [ReportController::class , 'monthly_attendance'])->name('reports.monthly.attendance');
+    Route::get('reports/monthly-attendance/{monthName}', [
+        ReportController::class, 'monthly_attendance'
+    ])->name('reports.monthly.attendance');
+    Route::get('reports/daily-attendance/{monthName}', [
+        ReportController::class, 'daily_attendance'
+    ])->name('reports.daily.attendance');
+    Route::get('reports/user-attendance', [
+        ReportController::class, 'user_attendance'
+    ])->name('reports.user.attendance');
 });

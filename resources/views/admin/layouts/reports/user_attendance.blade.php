@@ -37,12 +37,16 @@
     </style>
 @endpush
 
+@php
+    $monthNames = app('TableNameToMonthName')->getMonthNameFromDatabase();
+@endphp
+
 @section('content')
-    <form action="{{ route('reports.monthly.attendance', $month_name) }}" method="get">
+    <form action="{{ route('reports.user.attendance') }}" method="get">
         <div class="search-bar">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-12 col-lg-4">
+                    <div class="col-12 col-lg-3">
                         <div class="form-group">
                             <label>Date From:</label>
                             <input type="text" id="datepicker_from" name="date_from"
@@ -51,7 +55,7 @@
                                    id="date_from">
                         </div>
                     </div>
-                    <div class="col-12 col-lg-4">
+                    <div class="col-12 col-lg-3">
                         <div class="form-group">
                             <label>Date To:</label>
                             <input type="text" id="datepicker_to" name="date_to"
@@ -62,17 +66,33 @@
                     </div>
                     <div class="col-12 col-lg-3">
                         <div class="form-group">
+                            <label>Month</label>
+                            <select id="month" name="month" class="form-control select2bs4" style="width: 100%;">
+                                {{--                                @foreach(monthName() as $index => $month)--}}
+                                {{--                                    <option @if( \Carbon\Carbon::now()->format('F')  == $month ) selected--}}
+                                {{--                                            @endif--}}
+                                {{--                                        value="{{ str_pad($index, 2, 0, STR_PAD_LEFT) }}" >--}}
+                                {{--                                        {{ $month }}--}}
+                                {{--                                    </option>--}}
+                                {{--                                @endforeach--}}
+                                {{--                                <option value="09" @if(request()->get('month') == '09')  selected @endif>September--}}
+                                {{--                                </option>--}}
+                                <option value="10" @if(request()->get('month') == '10')  selected @endif>October
+                                </option>
+                                <option value="11" @if(request()->get('month') == '11')  selected @endif>November
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-2">
+                        <div class="form-group">
                             <label>User ID</label>
                             <select id="user_id" name="user_id" class="form-control select2bs4" style="width: 100%;">
                                 <option value="">Select a User Id</option>
                                 @foreach($users as $user)
-                                    @php
-                                        $monthQuery = request()->get('month') ?? \Carbon\Carbon::now()->format('m');
-                                        $user_name_query = \Illuminate\Support\Facades\DB::connection('odbc')->select("SELECT user_name FROM auth_logs_2023".$monthQuery." WHERE user_id =".$user->user_id." GROUP BY user_name");
-                                        $user_name = htmlspecialchars($user_name_query[0]->user_name ?? 'Unknown');
-                                    @endphp
                                     <option @if(request()->get('user_id') == $user->user_id)  selected @endif
-                                    value="{{ $user->user_id }}">{{ $user->user_id }} ({{ $user_name }})
+                                    value="{{ $user->user_id }}">{{ $user->user_id }} ({{ getUserName($user->user_id) }}
+                                        )
                                     </option>
                                 @endforeach
                             </select>
@@ -90,6 +110,7 @@
                 </div>
             </div>
         </div>
+        <!-- /.row -->
 
         <div class="row">
             <div class="col-12">
@@ -105,36 +126,31 @@
                                 <th>Serial</th>
                                 <th>User ID</th>
                                 <th>User Name</th>
-                                <th>Total Attendance</th>
+                                <th>Date</th>
+                                <th>In Time</th>
+                                <th>Out Time</th>
+                                <th>Total In Time</th>
+                                <th>Total Out Time</th>
+                                <th>Total Hour Worked</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @if($monthly_attendance_reports)
-                                @foreach($monthly_attendance_reports as $key => $monthly_attendance_report)
+                            @if($users_attendance)
+                                @foreach ($users_attendance as $key => $user_attendance)
                                     <tr>
                                         <td>{{ ++$key }}</td>
-                                        <td>
-                                            {{ $monthly_attendance_report->user_id }}
-                                        </td>
+                                        <td>{{ $user_attendance->user_id }}</td>
                                         <td>
                                             <b>
-                                                @if($monthly_attendance_report->user_name == "")
-                                                    @php
-                                                        $employee_name = \App\Models\Admin\Employee::where('employee_id', $monthly_attendance_report->user_id)->pluck('employee_name')->first()
-                                                    @endphp
-                                                    @if($employee_name)
-                                                        {{ $employee_name }}
-                                                    @else
-                                                        Name Not Found
-                                                    @endif
-                                                @else
-                                                    {{ $monthly_attendance_report->user_name }}
-                                                @endif
+                                                {{ getUserName($user_attendance->user_id) }}
                                             </b>
                                         </td>
-                                        <td>
-                                            {{ $monthly_attendance_report->days_attended }} days
-                                        </td>
+                                        <td>{{ $user_attendance->event_date }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($user_attendance->in_time)->format('h:i a') }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($user_attendance->out_time)->format('h:i a') }}</td>
+                                        <td>{{ $user_attendance->in_count }} times</td>
+                                        <td>{{ $user_attendance->out_count }} times</td>
+                                        <td>{{ totalHourWorked($user_attendance->in_time, $user_attendance->out_time) }}</td>
                                     </tr>
                                 @endforeach
                             @endif
@@ -148,7 +164,6 @@
             <!-- /.col -->
         </div>
         <!-- /.row -->
-
     </form>
 
 @endsection

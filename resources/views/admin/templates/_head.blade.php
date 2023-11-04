@@ -2,8 +2,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>
-        {{ $title ?? config('app.name') }}
+        {{ $title ?? 'AMS' }}
     </title>
+
+    <link rel="icon" type="image/png" href="https://www.khaborerkagoj.com/public/image/favicon.png">
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"

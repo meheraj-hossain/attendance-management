@@ -15,9 +15,9 @@ class TableNameToMonthName
                                                             FROM information_schema.tables
                                                             WHERE table_name LIKE 'auth_logs_%'");
 
-        $reverseTableNames =array_reverse($allTableNames);
-        $tableNames = array_slice($reverseTableNames, 0, 2);
-        $monthNames = [];
+        $reverseTableNames = array_reverse($allTableNames);
+        $tableNames        = array_slice($reverseTableNames, 0, 2);
+        $monthNames        = [];
 
         foreach ($tableNames as $table) {
             $tableName = $table->table_name;
@@ -29,6 +29,7 @@ class TableNameToMonthName
 
                 $date      = new \DateTime("{$year}-{$month}-01");
                 $monthName = $date->format('F-Y');
+
                 $monthNames[$tableName] = $monthName;
             }
         }

@@ -1,5 +1,5 @@
 <?php
-function convertMonthNameToYearMonth($monthName) : ?string
+function convertMonthNameToYearMonth($monthName): ?string
 {
     // Split the month name into parts
     $parts = explode('-', $monthName);
@@ -20,12 +20,25 @@ function convertMonthNameToYearMonth($monthName) : ?string
     return null; // Return null if the input format is invalid
 }
 
-function dateString($dateStrings) : int
+function totalHourWorked($in_Time, $out_Time)
 {
-    $dateString = $dateStrings;
-    list($day, $month, $year) = explode('/', $dateString);
-    $day = intval($day);
+    $inTime  = new DateTime($in_Time);
+    $outTime = new DateTime($out_Time);
 
-// $day will now contain the day part
-    return $day;
+    $timeDifference = $outTime->diff($inTime);
+
+    $totalHours   = $timeDifference->h;
+    $totalMinutes = $timeDifference->i;
+
+    return $totalHours . ' Hours and ' . $totalMinutes . ' minutes';
 }
+
+function getUserName($user_id)
+{
+    $monthQuery      = request()->get('month') ?? \Carbon\Carbon::now()->format('m');
+    $user_name_query = \Illuminate\Support\Facades\DB::connection('odbc')->select("SELECT user_name FROM auth_logs_2023" . $monthQuery . " WHERE user_id =" . $user_id . " AND user_name IS NOT NULL AND user_name <> '' GROUP BY user_name");
+    $user_name       = $user_name_query[0]->user_name ?? 'Unknown';
+
+    return $user_name;
+}
+
