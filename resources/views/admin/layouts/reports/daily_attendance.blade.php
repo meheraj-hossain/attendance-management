@@ -38,7 +38,7 @@
 @endpush
 
 @section('content')
-    <form action="{{ route('reports.monthly.attendance', $month_name) }}" method="get">
+    <form action="{{ route('reports.daily.attendance', $month_name) }}" method="get">
         <div class="search-bar">
             <div class="container-fluid">
                 <div class="row">
@@ -86,7 +86,8 @@
                     <div class="col-12 col-lg-1">
                         <div class="form-group">
                             <label class="invisible">Refresh</label>
-                            <a href="{{ route('reports.monthly.attendance', $month_name) }}" class="form-control btn btn-danger">
+                            <a href="{{ route('reports.daily.attendance', $month_name) }}"
+                               class="form-control btn btn-danger">
                                 <i class="fas fa-sync-alt"></i>
                                 Refresh
                             </a>
@@ -110,32 +111,39 @@
                                 <th>Serial</th>
                                 <th>User ID</th>
                                 <th>User Name</th>
-                                <th>Total Attendance</th>
+                                <th>Date</th>
+                                <th>Day</th>
+                                <th>In Time</th>
+                                <th>Out Time</th>
+                                <th>Total In Time</th>
+                                <th>Total Out Time</th>
+                                <th>Total Hour Worked</th>
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody>
-                            @if($monthly_attendance_reports)
-                                @foreach($monthly_attendance_reports as $key => $monthly_attendance_report)
-                                    <tr>
-                                        <td>{{ ++$key }}</td>
-                                        <td>
-                                            {{ $monthly_attendance_report->user_id }}
-                                        </td>
-                                        <td>
-                                            <b>
-                                                @foreach(fetchUser() as $user)
-                                                    @if($user->user_id == $monthly_attendance_report->user_id)
-                                                        <b>{{ $user->name }}</b>
-                                                    @endif
-                                                @endforeach
-                                            </b>
-                                        </td>
-                                        <td>
-                                            {{ $monthly_attendance_report->days_attended }} days
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @endif
+                            {{--                            @if($monthly_attendance_reports)--}}
+                            {{--                                @foreach($monthly_attendance_reports as $key => $monthly_attendance_report)--}}
+                            {{--                                    <tr>--}}
+                            {{--                                        <td>{{ ++$key }}</td>--}}
+                            {{--                                        <td>--}}
+                            {{--                                            {{ $monthly_attendance_report->user_id }}--}}
+                            {{--                                        </td>--}}
+                            {{--                                        <td>--}}
+                            {{--                                            <b>--}}
+                            {{--                                                @foreach(fetchUser() as $user)--}}
+                            {{--                                                    @if($user->user_id == $monthly_attendance_report->user_id)--}}
+                            {{--                                                        <b>{{ $user->name }}</b>--}}
+                            {{--                                                    @endif--}}
+                            {{--                                                @endforeach--}}
+                            {{--                                            </b>--}}
+                            {{--                                        </td>--}}
+                            {{--                                        <td>--}}
+                            {{--                                            {{ $monthly_attendance_report->days_attended }} days--}}
+                            {{--                                        </td>--}}
+                            {{--                                    </tr>--}}
+                            {{--                                @endforeach--}}
+                            {{--                            @endif--}}
                             </tbody>
                         </table>
                     </div>

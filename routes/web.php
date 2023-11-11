@@ -30,24 +30,20 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
         return view('dashboard.dashboard');
     })->name('dashboard');
 
-    Route::middleware('role:' . \App\Models\User::ROLE_SUPER_ADMIN)->group(function () {
+    Route::middleware('role:' . \App\Models\User::ROLE_SUPER_ADMIN . ',' . \App\Models\User::ROLE_ADMIN)->group(function () {
         Route::resource('users', UserController::class);
-
         Route::get('employees', [EmployeeController::class, 'index'])->name('employees.index');
-        Route::get('employees/create', [EmployeeController::class, 'create'])->name('employees.create');
-        Route::post('employees/store', [EmployeeController::class, 'store'])->name('employees.store');
-        Route::get('employees/edit/{employee}', [EmployeeController::class, 'edit'])->name('employees.edit');
-        Route::put('employees/update/{employee}', [EmployeeController::class, 'update'])->name('employees.update');
-        Route::delete('employees/delete/{employee}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
-    });
 
-    Route::get('reports/monthly-attendance/{monthName}', [
-        ReportController::class, 'monthly_attendance'
-    ])->name('reports.monthly.attendance');
-    Route::get('reports/daily-attendance/{monthName}', [
-        ReportController::class, 'daily_attendance'
-    ])->name('reports.daily.attendance');
-    Route::get('reports/user-attendance', [
-        ReportController::class, 'user_attendance'
-    ])->name('reports.user.attendance');
+        Route::get('reports/monthly-attendance/{monthName}', [
+            ReportController::class, 'monthly_attendance'
+        ])->name('reports.monthly.attendance');
+
+        Route::get('reports/daily-attendance/{monthName}', [
+            ReportController::class, 'daily_attendance'
+        ])->name('reports.daily.attendance');
+
+        Route::get('reports/user-attendance', [
+            ReportController::class, 'user_attendance'
+        ])->name('reports.user.attendance');
+    });
 });

@@ -64,23 +64,17 @@
                                    id="date_to">
                         </div>
                     </div>
-                    <div class="col-12 col-lg-3">
+                    <div class="col-12 col-lg-2">
                         <div class="form-group">
                             <label>Month</label>
                             <select id="month" name="month" class="form-control select2bs4" style="width: 100%;">
-                                {{--                                @foreach(monthName() as $index => $month)--}}
-                                {{--                                    <option @if( \Carbon\Carbon::now()->format('F')  == $month ) selected--}}
-                                {{--                                            @endif--}}
-                                {{--                                        value="{{ str_pad($index, 2, 0, STR_PAD_LEFT) }}" >--}}
-                                {{--                                        {{ $month }}--}}
-                                {{--                                    </option>--}}
-                                {{--                                @endforeach--}}
-                                {{--                                <option value="09" @if(request()->get('month') == '09')  selected @endif>September--}}
-                                {{--                                </option>--}}
-                                <option value="10" @if(request()->get('month') == '10')  selected @endif>October
-                                </option>
-                                <option value="11" @if(request()->get('month') == '11')  selected @endif>November
-                                </option>
+                                @foreach($monthNames as $index => $month)
+                                    <option @if( request()->month  == $month ) selected
+                                            @endif
+                                            value="{{ $month }}">
+                                        {{ $month }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -89,9 +83,9 @@
                             <label>User ID</label>
                             <select id="user_id" name="user_id" class="form-control select2bs4" style="width: 100%;">
                                 <option value="">Select a User Id</option>
-                                @foreach($users as $user)
+                                @foreach(fetchUser() as $user)
                                     <option @if(request()->get('user_id') == $user->user_id)  selected @endif
-                                    value="{{ $user->user_id }}">{{ $user->user_id }} ({{ getUserName($user->user_id) }}
+                                    value="{{ $user->user_id }}">{{ $user->user_id }} ({{ $user->name }}
                                         )
                                     </option>
                                 @endforeach
@@ -105,6 +99,15 @@
                                 <i class="fas fa-search"></i>
                                 Search
                             </button>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-1">
+                        <div class="form-group">
+                            <label class="invisible">Refresh</label>
+                            <a href="{{ route('reports.user.attendance') }}" class="form-control btn btn-danger">
+                                <i class="fas fa-sync-alt"></i>
+                                Refresh
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -127,6 +130,7 @@
                                 <th>User ID</th>
                                 <th>User Name</th>
                                 <th>Date</th>
+                                <th>Day</th>
                                 <th>In Time</th>
                                 <th>Out Time</th>
                                 <th>Total In Time</th>
@@ -142,10 +146,15 @@
                                         <td>{{ $user_attendance->user_id }}</td>
                                         <td>
                                             <b>
-                                                {{ getUserName($user_attendance->user_id) }}
+                                                @foreach(fetchUser() as $user)
+                                                    @if($user->user_id == $user_attendance->user_id)
+                                                        <b>{{ $user->name }}</b>
+                                                    @endif
+                                                @endforeach
                                             </b>
                                         </td>
                                         <td>{{ $user_attendance->event_date }}</td>
+                                        <td>{{ (new DateTime($user_attendance->event_date))->format('l') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($user_attendance->in_time)->format('h:i a') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($user_attendance->out_time)->format('h:i a') }}</td>
                                         <td>{{ $user_attendance->in_count }} times</td>

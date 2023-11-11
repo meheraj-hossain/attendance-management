@@ -16,15 +16,15 @@ class UserService
         try {
             $user = User::where('id', $request->id)->first();
             if (empty($user)) {
-                $user = new User();
+                $user           = new User();
+                $user->password = Hash::make($request->password);
             } else {
                 $user->status = $request->status;
-                $user->role = $request->role;
+                $user->role   = $request->role;
             }
 
-            $user->name         = $request->name;
-            $user->email        = $request->email;
-            $user->password      = Hash::make($request->password);
+            $user->name  = $request->name;
+            $user->email = $request->email;
             $user->save();
         } catch (\exception $exception) {
             throw new \Exception($exception->getMessage());

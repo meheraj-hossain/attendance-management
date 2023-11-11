@@ -6,6 +6,7 @@ use App\Models\Admin\Employee;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class ReportController extends Controller
 {
@@ -100,13 +101,13 @@ class ReportController extends Controller
         $dateQuery          = '';
         $userQuery          = '';
         if ($request->date_from) {
-            $dateQuery = 'WHERE DAY(server_record_time) >= ' . $request->date_from;
+            $dateQuery = 'WHERE DAY(event_time) >= ' . $request->date_from;
         }
         if ($request->date_to) {
-            $dateQuery = 'WHERE DAY(server_record_time) <= ' . $request->date_to;
+            $dateQuery = 'WHERE DAY(event_time) <= ' . $request->date_to;
         }
         if ($request->date_from && $request->date_to) {
-            $dateQuery = 'WHERE DAY(server_record_time) BETWEEN ' . $request->date_from . ' AND ' . $request->date_to;
+            $dateQuery = 'WHERE DAY(event_time) BETWEEN ' . $request->date_from . ' AND ' . $request->date_to;
         }
         if ($request->user_id) {
             if ($request->date_from || $request->date_to) {
@@ -123,50 +124,56 @@ class ReportController extends Controller
                 b.user_id,
                 MAX(b.user_name) AS user_name,
                 b.month_name,
-                COUNT(DISTINCT CAST(b.server_record_time AS DATE)) AS days_attended
+                COUNT(DISTINCT CAST(b.event_time AS DATE)) AS days_attended
                 FROM (
                     SELECT
                     a.user_id,
                     MAX(a.user_name) AS user_name,
-                    server_record_time,
-                    DATEPART(mm, server_record_time) AS month_name
+                    event_time,
+                    DATEPART(mm, event_time) AS month_name
                     FROM (
                             SELECT
                             user_id,
                             user_name,
-                            CAST(server_record_time AS DATETIME) AS server_record_time
+                            CAST(event_time AS DATETIME) AS event_time
                             FROM auth_logs_$yearMonth
-                            --WHERE DAY(server_record_time) BETWEEN 16 AND 31  -- Filter records from 10th to 20th
+                            --WHERE DAY(event_time) BETWEEN 16 AND 31  -- Filter records from 10th to 20th
                             $dateQuery
                             $userQuery
                         ) a
-                        GROUP BY a.user_id, a.server_record_time
+                        WHERE a.user_name <> ''
+                        GROUP BY a.user_id, a.event_time
                 ) b
                 GROUP BY b.user_id, b.month_name
                 ORDER BY b.month_name ASC");
-
         return view('admin.layouts.reports.monthly_attendance', $data);
     }
 
-    public function daily_attendance(Request $request)
+    public function daily_attendance(Request $request, $monthName)
     {
-        return view('admin.layouts.reports.daily_attendance');
+        $yearMonth = convertMonthNameToYearMonth($monthName);
+
+        $data['title']      = 'Daily Attendance Report of ' . $monthName;
+        $data['month_name'] = $monthName;
+
+        return view('admin.layouts.reports.daily_attendance', $data);
     }
 
     public function user_attendance(Request $request)
     {
-        $query = '';
-        $dateQuery          = '';
-        $monthQuery = $request->month;
+        $yearMonth = convertMonthNameToYearMonth($request->month);
+        $dateQuery = '';
+        $query     = '';
 
         if ($request->date_from) {
-            $dateQuery = 'WHERE DAY(server_record_time) >= ' . $request->date_from;
+            $dateQuery = 'WHERE DAY(event_time) >= ' . $request->date_from;
         }
+
         if ($request->date_to) {
-            $dateQuery = 'WHERE DAY(server_record_time) <= ' . $request->date_to;
+            $dateQuery = 'WHERE DAY(event_time) <= ' . $request->date_to;
         }
         if ($request->date_from && $request->date_to) {
-            $dateQuery = 'WHERE DAY(server_record_time) BETWEEN ' . $request->date_from . ' AND ' . $request->date_to;
+            $dateQuery = 'WHERE DAY(event_time) BETWEEN ' . $request->date_from . ' AND ' . $request->date_to;
         }
         if ($request->user_id) {
             if ($request->date_from || $request->date_to) {
@@ -174,31 +181,29 @@ class ReportController extends Controller
             } else {
                 $userQuery = 'WHERE user_id = ' . $request->user_id;
             }
+        } else {
+            $userQuery = '';
         }
 
         if ($request->date_from || $request->date_to || $request->user_id) {
             $query = DB::connection('odbc')->select("
             SELECT user_id, user_name,
-       CAST(server_record_time AS DATE) AS event_date,
-       MIN(CASE WHEN terminal_name = 'In' THEN server_record_time ELSE NULL END) AS in_time,
-	   MAX(CASE WHEN terminal_name = 'Out' THEN server_record_time ELSE NULL END) AS out_time,
-	   COUNT(CASE WHEN terminal_name = 'In' THEN 1 ELSE NULL END) AS in_count,
-	   COUNT(CASE WHEN terminal_name = 'Out' THEN 1 ELSE NULL END) AS out_count
-FROM auth_logs_2023$monthQuery
+       CAST(event_time AS DATE) AS event_date,
+       MIN(CASE WHEN terminal_name = 'FACE IN' THEN event_time ELSE NULL END) AS in_time,
+	   MAX(CASE WHEN terminal_name = 'FACE Out' THEN event_time ELSE NULL END) AS out_time,
+	   COUNT(CASE WHEN terminal_name = 'FACE IN' THEN 1 ELSE NULL END) AS in_count,
+	   COUNT(CASE WHEN terminal_name = 'FACE Out' THEN 1 ELSE NULL END) AS out_count
+FROM auth_logs_$yearMonth
 $dateQuery
 $userQuery
-GROUP BY user_id, CAST(server_record_time AS DATE), user_name
+AND user_name <> ''
+GROUP BY user_id, CAST(event_time AS DATE), user_name
 ORDER BY user_id
             ");
         }
 
-//        $user_name_query = \Illuminate\Support\Facades\DB::connection('odbc')
-//                                                         ->select("SELECT user_id, user_name FROM auth_logs_2023" . request()->get('month') . " WHERE user_id = " . $user->user_id . " AND user_name IS NOT NULL AND user_name <> '' GROUP BY user_id, user_name");
-//        dd($user_name_query);
         $data['title']            = 'User Attendance Report';
-        $data['users']            = DB::connection('odbc')->select("SELECT user_id, name FROM users GROUP BY user_id, name ORDER BY user_id ASC");
         $data['users_attendance'] = $query;
-//        dd($data['users_attendance']);
         return view('admin.layouts.reports.user_attendance', $data);
     }
 

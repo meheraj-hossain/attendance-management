@@ -56,13 +56,14 @@
                                         </span>
                                     </td>
 
-
                                     <td class="text-center">
                                         <a href="{{ route('users.edit', $user->id) }}"
                                            class="btn btn-info btn-sm"><i class="fas fa-edit nav-icon"></i>Edit</a>
-                                        <a href="{{ route('users.destroy', $user->id) }}"
-                                           class="btn btn-danger btn-sm" data-confirm-delete="true"><i
-                                                class="fa fa-trash-alt nav-icon"></i>Delete</a>
+                                        @if(!auth()->user()->role == User::ROLE_ADMIN)
+                                            <a href="{{ route('users.destroy', $user->id) }}"
+                                               class="btn btn-danger btn-sm" data-confirm-delete="true"><i
+                                                    class="fa fa-trash-alt nav-icon"></i>Delete</a>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

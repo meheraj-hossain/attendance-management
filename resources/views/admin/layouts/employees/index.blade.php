@@ -20,8 +20,8 @@
                     <h3 class="card-title float-lg-left d-lg-flex align-items-lg-center">
                         {{ $title }}
                     </h3>
-                    <a href="{{ route('employees.create') }}" class="btn btn-info btn-sm float-lg-right"> Add New
-                        Employee Info</a>
+{{--                    <a href="{{ route('employees.create') }}" class="btn btn-info btn-sm float-lg-right"> Add New--}}
+                    {{--                        Employee Info</a>--}}
 
                 </div>
                 <!-- /.card-header -->
@@ -32,32 +32,37 @@
                             <th>Serial</th>
                             <th>Employee ID</th>
                             <th>Employee Name</th>
-                            <th>Employee Email</th>
-                            <th>Employee Designation</th>
-                            <th>Employee Department</th>
-                            <th>Employee Status</th>
-                            <th>Action</th>
+                            <th>Joined Since</th>
                         </tr>
                         </thead>
                         <tbody>
-                        @if($employees->count() > 0)
+                        @if(count($employees))
                             @foreach($employees as $key =>$employee)
+                                @php
+                                $newDate = new dateTime($employee->regist_at);
+                                @endphp
                                 <tr>
                                     <td>{{ ++$key }}</td>
-                                    <td> {{ $employee->employee_id }}
+                                    <td> {{ $employee->user_id }}
                                     </td>
-                                    <td>{{ $employee->employee_name }}</td>
-                                    <td>{{ $employee->employee_email }}</td>
-                                    <td>{{ $employee->employee_designation }}</td>
-                                    <td>{{ $employee->employee_department }}</td>
-                                    <td class="d-lg-flex justify-content-lg-center">
-                                        <span
-                                            class="badge {{ ($employee->employee_status == Employee::STATUS_ACTIVE) ? 'badge-success' : 'badge-danger' }}">{{ Employee::STATUS[$employee->employee_status] }}
-                                        </span>
+                                    <td>
+                                        <b>
+                                            {{ $employee->name }}
+                                        </b>
                                     </td>
-                                    <td class="text-center">
-                                        <a href="{{ route('employees.edit', $employee->id) }}"
-                                           class="btn btn-info btn-sm"><i class="fas fa-edit nav-icon"></i>Edit</a>
+                                    <td>
+                                        {{ $newDate->format('d F, Y') }}
+                                    </td>
+{{--                                    <td>{{ $employee->employee_designation }}</td>--}}
+{{--                                    <td>{{ $employee->employee_department }}</td>--}}
+{{--                                    <td class="d-lg-flex justify-content-lg-center">--}}
+{{--                                        <span--}}
+{{--                                            class="badge {{ ($employee->employee_status == Employee::STATUS_ACTIVE) ? 'badge-success' : 'badge-danger' }}">{{ Employee::STATUS[$employee->employee_status] }}--}}
+{{--                                        </span>--}}
+{{--                                    </td>--}}
+{{--                                    <td class="text-center">--}}
+{{--                                        <a href="{{ route('employees.edit', $employee->id) }}"--}}
+{{--                                           class="btn btn-info btn-sm"><i class="fas fa-edit nav-icon"></i>Edit</a>--}}
                                         {{--                                        <form action="{{ route('employees.destroy') }}" method="post"--}}
                                         {{--                                              style="display:inline">--}}
                                         {{--                                            @csrf--}}
@@ -69,12 +74,12 @@
                                         {{--                                                Delete--}}
                                         {{--                                            </button>--}}
                                         {{--                                        </form>--}}
-                                        <a href="{{ route('employees.destroy', $employee->id) }}"
-                                           class="btn btn-danger btn-sm" data-confirm-delete="true"><i
-                                                class="fa fa-trash-alt nav-icon"></i>Delete</a>
+{{--                                        <a href="{{ route('employees.destroy', $employee->id) }}"--}}
+{{--                                           class="btn btn-danger btn-sm" data-confirm-delete="true"><i--}}
+{{--                                                class="fa fa-trash-alt nav-icon"></i>Delete</a>--}}
 
 
-                                    </td>
+{{--                                    </td>--}}
                                 </tr>
                             @endforeach
                         @endif
@@ -110,7 +115,7 @@
         $(function () {
             $("#example1").DataTable({
                 "responsive": true, "lengthChange": false, "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                "buttons": ["copy", "csv", "excel", "pdf", "print"]
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         });
     </script>

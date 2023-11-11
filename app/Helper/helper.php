@@ -1,4 +1,7 @@
 <?php
+
+use Illuminate\Support\Facades\DB;
+
 function convertMonthNameToYearMonth($monthName): ?string
 {
     // Split the month name into parts
@@ -33,12 +36,24 @@ function totalHourWorked($in_Time, $out_Time)
     return $totalHours . ' Hours and ' . $totalMinutes . ' minutes';
 }
 
-function getUserName($user_id)
+function fetchUser()
 {
-    $monthQuery      = request()->get('month') ?? \Carbon\Carbon::now()->format('m');
-    $user_name_query = \Illuminate\Support\Facades\DB::connection('odbc')->select("SELECT user_name FROM auth_logs_2023" . $monthQuery . " WHERE user_id =" . $user_id . " AND user_name IS NOT NULL AND user_name <> '' GROUP BY user_name");
-    $user_name       = $user_name_query[0]->user_name ?? 'Unknown';
-
-    return $user_name;
+    return DB::connection('odbc')->select("SELECT user_id, name FROM users GROUP BY user_id, name ORDER BY user_id ASC");
 }
+
+//function monthNameToNumeric($monthName)
+//{
+//    // Attempt to parse the input string
+//    $date = date_parse_from_format('F-Y', $monthName);
+//
+//    // Check if parsing was successful
+//    if ($date['error_count'] === 0 && $date['warning_count'] === 0) {
+//        $year  = $date['year'];
+//        $month = str_pad($date['month'], 2, '0', STR_PAD_LEFT);
+//
+//        return $year . $month;
+//    }
+//
+//    return null; // Handle the case where the input format is not as expected
+//}
 

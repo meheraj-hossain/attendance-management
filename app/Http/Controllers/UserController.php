@@ -21,7 +21,7 @@ class UserController extends Controller
     public function index()
     {
         $data['title'] = 'User Information';
-        $data['users'] = User::orderBy('id', 'desc')->get();
+        $data['users'] = User::where('role', User::ROLE_ADMIN)->orderBy('id', 'desc')->get();
         $title         = 'Delete User!';
         $text          = "Are you sure you want to delete?";
         confirmDelete($title, $text);
@@ -50,8 +50,8 @@ class UserController extends Controller
 
     public function edit(string $id)
     {
-        $data['title']    = 'Edit User Information';
-        $data['user'] = User::findOrFail($id);
+        $data['title'] = 'Edit User Information';
+        $data['user']  = User::findOrFail($id);
 
         return view('admin.layouts.users.edit', $data);
     }

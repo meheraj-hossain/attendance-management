@@ -80,7 +80,7 @@ return [
 
         'odbc' => [
             'driver'   => 'odbc',
-            'dsn'      => 'sqlsrv:Server=SERVER-ATTENDAN,1433;Database=UCDB',
+            'dsn'      => 'sqlsrv:Server=DESKTOP-5817L5Q,1433;Database=UCDB',
             'host'     => '',
             'port'     => '',
             'database' => 'UCDB',
