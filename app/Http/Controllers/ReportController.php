@@ -156,6 +156,60 @@ class ReportController extends Controller
         $data['title']      = 'Daily Attendance Report of ' . $monthName;
         $data['month_name'] = $monthName;
 
+        $dateQuery = '';
+        $userQuery = '';
+        if ($request->date_from) {
+            $dateQuery = 'WHERE DAY(event_time) >= ' . $request->date_from;
+        }
+        if ($request->date_to) {
+            $dateQuery = 'WHERE DAY(event_time) <= ' . $request->date_to;
+        }
+        if ($request->date_from && $request->date_to) {
+            $dateQuery = 'WHERE DAY(event_time) BETWEEN ' . $request->date_from . ' AND ' . $request->date_to;
+        }
+        if ($request->user_id) {
+            if ($request->date_from || $request->date_to) {
+                $userQuery = 'AND user_id = ' . $request->user_id;
+            } else {
+                $userQuery = 'WHERE user_id = ' . $request->user_id;
+            }
+        }
+
+        $data['users'] = DB::connection('odbc')->select("SELECT user_id, name FROM users GROUP BY user_id, name ORDER BY user_id ASC");
+
+        $data['daily_attendance_reports'] = DB::connection('odbc')
+                                                ->select("SELECT
+                b.user_id,
+                MAX(b.user_name) AS user_name,
+                b.event_date,
+                MIN(CASE WHEN b.terminal_name = 'FACE IN' THEN b.event_time ELSE NULL END) AS in_time,
+                MAX(CASE WHEN b.terminal_name = 'FACE Out' THEN b.event_time ELSE NULL END) AS out_time,
+                COUNT(CASE WHEN b.terminal_name = 'FACE IN' THEN 1 ELSE NULL END) AS in_count,
+                COUNT(CASE WHEN b.terminal_name = 'FACE Out' THEN 1 ELSE NULL END) AS out_count
+                FROM (
+                    SELECT
+                    a.user_id,
+                    MAX(a.user_name) AS user_name,
+                    event_time,
+                    terminal_name,
+                    CAST(event_time AS DATE) AS event_date
+                    FROM (
+                            SELECT
+                            user_id,
+                            user_name,
+                            CAST(event_time AS DATETIME) AS event_time,
+                            terminal_name
+                            FROM auth_logs_$yearMonth
+                            --WHERE DAY(event_time) BETWEEN 16 AND 31  -- Filter records from 10th to 20th
+                            $dateQuery
+                            $userQuery
+                        ) a
+                        WHERE a.user_name <> ''
+                        GROUP BY a.user_id, a.event_time, a.terminal_name
+                ) b
+                GROUP BY b.user_id, b.event_date
+                ORDER BY b.event_date ASC");
+
         return view('admin.layouts.reports.daily_attendance', $data);
     }
 

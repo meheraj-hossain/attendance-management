@@ -118,32 +118,47 @@
                                 <th>Total In Time</th>
                                 <th>Total Out Time</th>
                                 <th>Total Hour Worked</th>
-                                <th></th>
                             </tr>
                             </thead>
                             <tbody>
-                            {{--                            @if($monthly_attendance_reports)--}}
-                            {{--                                @foreach($monthly_attendance_reports as $key => $monthly_attendance_report)--}}
-                            {{--                                    <tr>--}}
-                            {{--                                        <td>{{ ++$key }}</td>--}}
-                            {{--                                        <td>--}}
-                            {{--                                            {{ $monthly_attendance_report->user_id }}--}}
-                            {{--                                        </td>--}}
-                            {{--                                        <td>--}}
-                            {{--                                            <b>--}}
-                            {{--                                                @foreach(fetchUser() as $user)--}}
-                            {{--                                                    @if($user->user_id == $monthly_attendance_report->user_id)--}}
-                            {{--                                                        <b>{{ $user->name }}</b>--}}
-                            {{--                                                    @endif--}}
-                            {{--                                                @endforeach--}}
-                            {{--                                            </b>--}}
-                            {{--                                        </td>--}}
-                            {{--                                        <td>--}}
-                            {{--                                            {{ $monthly_attendance_report->days_attended }} days--}}
-                            {{--                                        </td>--}}
-                            {{--                                    </tr>--}}
-                            {{--                                @endforeach--}}
-                            {{--                            @endif--}}
+                            @if(count($daily_attendance_reports) > 0)
+                                @foreach($daily_attendance_reports as $key =>$query)
+                                    <tr>
+                                        <th>
+                                            {{ ++$key  }}
+                                        </th>
+                                        <td>
+                                            {{ $query->user_id }}
+                                        </td>
+                                        <td>
+                                            <b>
+                                                {{ $query->user_name }}
+                                            </b>
+                                        </td>
+                                        <td>
+                                            {{ $query->event_date }}
+                                        </td>
+                                        <td>
+                                            {{ (new DateTime($query->event_date))->format('l') }}
+                                        </td>
+                                        <td>
+                                            {{ \Carbon\Carbon::parse($query->in_time)->format('h:i a') }}
+                                        </td>
+                                        <td>
+                                            {{ \Carbon\Carbon::parse($query->out_time)->format('h:i a') }}
+                                        </td>
+                                        <td>
+                                            {{ $query->in_count }}
+                                        </td>
+                                        <td>
+                                            {{ $query->out_count }}
+                                        </td>
+                                        <td>
+                                            {{ totalHourWorked($query->in_time, $query->out_time) }}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
                             </tbody>
                         </table>
                     </div>
