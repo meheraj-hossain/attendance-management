@@ -14,12 +14,9 @@ class TableNameToMonthName
         $allTableNames = DB::connection('odbc')->select("SELECT table_name
                                                             FROM information_schema.tables
                                                             WHERE table_name LIKE 'auth_logs_%'");
-        //        dd($allTableNames);
-
-        //        $reverseTableNames = array_reverse($allTableNames);
-        $tableNames = array_slice($allTableNames, 2);
+        $frontTableNames = array_slice($allTableNames, 2, 4 );
+        $tableNames = array_reverse($frontTableNames);
         $monthNames = [];
-
         foreach ($tableNames as $table) {
             $tableName = $table->table_name;
             // Extract the year and month from the table name using regular expressions
