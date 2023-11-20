@@ -151,64 +151,48 @@ class ReportController extends Controller
 
     public function daily_attendance(Request $request, $monthName)
     {
-        $yearMonth = convertMonthNameToYearMonth($monthName);
-
+        $yearMonth          = convertMonthNameToYearMonth($monthName);
         $data['title']      = 'Daily Attendance Report of ' . $monthName;
         $data['month_name'] = $monthName;
+        $dateQuery          = '';
+        $userQuery          = '';
 
-        $dateQuery = '';
-        $userQuery = '';
-        if ($request->date_from) {
-            $dateQuery = 'WHERE DAY(event_time) >= ' . $request->date_from;
-        }
-        if ($request->date_to) {
-            $dateQuery = 'WHERE DAY(event_time) <= ' . $request->date_to;
-        }
         if ($request->date_from && $request->date_to) {
-            $dateQuery = 'WHERE DAY(event_time) BETWEEN ' . $request->date_from . ' AND ' . $request->date_to;
+            $dateQuery .= ' AND DAY(CAST(DATEADD(HOUR, -6, event_time) AS DATE)) BETWEEN ' . $request->date_from . ' AND ' . $request->date_to;
+        } elseif ($request->date_from) {
+            $dateQuery .= ' AND DAY(CAST(DATEADD(HOUR, -6, event_time) AS DATE)) BETWEEN ' . $request->date_from . ' AND ' . Carbon::now()->format('d');
+        } elseif ($request->date_to) {
+            $dateQuery .= ' AND DAY(CAST(DATEADD(HOUR, -6, event_time) AS DATE)) <= ' . $request->date_to;
+        } else {
+            $dateQuery .= 'AND DAY(CAST(DATEADD(HOUR, -6, event_time) AS DATE)) = ' . Carbon::now()->format('d');
         }
+
         if ($request->user_id) {
-            if ($request->date_from || $request->date_to) {
-                $userQuery = 'AND user_id = ' . $request->user_id;
-            } else {
-                $userQuery = 'WHERE user_id = ' . $request->user_id;
-            }
+            $userQuery = ' AND user_id = ' . $request->user_id;
         }
 
-        $data['users'] = DB::connection('odbc')->select("SELECT user_id, name FROM users GROUP BY user_id, name ORDER BY user_id ASC");
-
+        $data['users']                    = DB::connection('odbc')
+                                              ->select("SELECT user_id, name FROM users GROUP BY user_id, name ORDER BY user_id ASC");
         $data['daily_attendance_reports'] = DB::connection('odbc')
-                                              ->select("SELECT
-                b.user_id,
-                MAX(b.user_name) AS user_name,
-                b.event_date,
-                MIN(CASE WHEN b.terminal_name = 'FACE IN' THEN b.event_time ELSE NULL END) AS in_time,
-                MAX(CASE WHEN b.terminal_name = 'FACE Out' THEN b.event_time ELSE NULL END) AS out_time,
-                COUNT(CASE WHEN b.terminal_name = 'FACE IN' THEN 1 ELSE NULL END) AS in_count,
-                COUNT(CASE WHEN b.terminal_name = 'FACE Out' THEN 1 ELSE NULL END) AS out_count
-                FROM (
-                    SELECT
-                    a.user_id,
-                    MAX(a.user_name) AS user_name,
-                    event_time,
-                    terminal_name,
-                    CAST(event_time AS DATE) AS event_date
-                    FROM (
-                            SELECT
-                            user_id,
-                            user_name,
-                            CAST(event_time AS DATETIME) AS event_time,
-                            terminal_name
-                            FROM auth_logs_$yearMonth
-                            --WHERE DAY(event_time) BETWEEN 16 AND 31  -- Filter records from 10th to 20th
-                            $dateQuery
-                            $userQuery
-                        ) a
-                        WHERE a.user_name <> ''
-                        GROUP BY a.user_id, a.event_time, a.terminal_name
-                ) b
-                GROUP BY b.user_id, b.event_date
-                ORDER BY b.event_date ASC");
+                                              ->select("
+    SELECT
+        user_id,
+        CAST(DATEADD(HOUR, -6, event_time) AS DATE) AS modified_event_time,
+        MIN(CASE WHEN terminal_name = 'FACE IN' THEN DATEADD(HOUR, -6, event_time) ELSE NULL END) AS modified_in_time,
+        MAX(CASE WHEN terminal_name = 'FACE Out' THEN DATEADD(HOUR, -6, event_time) ELSE NULL END) AS modified_out_time,
+        MIN(CASE WHEN terminal_name = 'FACE IN' THEN event_time ELSE NULL END) AS in_time,
+        COUNT(CASE WHEN terminal_name = 'FACE IN' THEN 1 END) AS total_in_count,
+        COUNT(CASE WHEN terminal_name = 'FACE Out' THEN 1 END) AS total_out_count
+    FROM
+        auth_logs_$yearMonth
+    WHERE user_name <> ''
+        $dateQuery
+        $userQuery
+    GROUP BY
+        user_id, CAST(DATEADD(HOUR, -6, event_time) AS DATE)
+    ORDER BY
+        CAST(DATEADD(HOUR, -6, event_time) AS DATE), user_id
+");
 
         return view('admin.layouts.reports.daily_attendance', $data);
     }
@@ -216,29 +200,22 @@ class ReportController extends Controller
     public function user_attendance(Request $request)
     {
         $yearMonth = convertMonthNameToYearMonth($request->month);
-        $dateQuery = '';
         $query     = '';
+        $dateQuery = '';
+        $userQuery = '';
 
         if ($request->date_from) {
-            $dateQuery = 'WHERE DAY(event_time) >= ' . $request->date_from;
+            $dateQuery = ' AND DAY(CAST(DATEADD(HOUR, -6, event_time) AS DATE)) BETWEEN ' . $request->date_from . ' AND ' . Carbon::now()->format('d');
         }
-
         if ($request->date_to) {
-            $dateQuery = 'WHERE DAY(event_time) <= ' . $request->date_to;
+            $dateQuery = 'AND DAY(CAST(DATEADD(HOUR, -6, event_time) AS DATE)) <= ' . $request->date_to;
         }
         if ($request->date_from && $request->date_to) {
-            $dateQuery = 'WHERE DAY(event_time) BETWEEN ' . $request->date_from . ' AND ' . $request->date_to;
+            $dateQuery = 'AND DAY(CAST(DATEADD(HOUR, -6, event_time) AS DATE)) BETWEEN ' . $request->date_from . ' AND ' . $request->date_to;
         }
         if ($request->user_id) {
-            if ($request->date_from || $request->date_to) {
-                $userQuery = 'AND user_id = ' . $request->user_id;
-            } else {
-                $userQuery = 'WHERE user_id = ' . $request->user_id;
-            }
-        } else {
-            $userQuery = '';
+            $userQuery = 'AND user_id = ' . $request->user_id;
         }
-
         if ($request->date_from || $request->date_to || $request->user_id) {
             $query = DB::connection('odbc')->select("
     SELECT
@@ -251,6 +228,7 @@ class ReportController extends Controller
         COUNT(CASE WHEN terminal_name = 'FACE Out' THEN 1 END) AS total_out_count
     FROM
         auth_logs_$yearMonth
+    WHERE user_name <> ''
     $dateQuery
     $userQuery
     GROUP BY
@@ -259,10 +237,9 @@ class ReportController extends Controller
         user_id
 ");
         }
-
         $data['title']            = 'User Attendance Report';
         $data['users_attendance'] = $query;
-//        dd($data['users_attendance']);
+
         return view('admin.layouts.reports.user_attendance', $data);
     }
 

@@ -115,8 +115,8 @@
                                 <th>Day</th>
                                 <th>In Time</th>
                                 <th>Out Time</th>
-{{--                                <th>Total In Time</th>--}}
-{{--                                <th>Total Out Time</th>--}}
+                                {{--                                <th>Total In Time</th>--}}
+                                {{--                                <th>Total Out Time</th>--}}
                                 <th>Total Hour Worked</th>
                             </tr>
                             </thead>
@@ -124,37 +124,41 @@
                             @if(count($daily_attendance_reports) > 0)
                                 @foreach($daily_attendance_reports as $key =>$query)
                                     <tr>
-                                        <th>
-                                            {{ ++$key  }}
-                                        </th>
-                                        <td>
-                                            {{ $query->user_id }}
-                                        </td>
+                                        <td>{{ ++$key }}</td>
+                                        <td>{{ $query->user_id }}</td>
                                         <td>
                                             <b>
-                                                {{ $query->user_name }}
+                                                @foreach(fetchUser() as $user)
+                                                    @if($user->user_id == $query->user_id)
+                                                        <b>{{ $user->name }}</b>
+                                                    @endif
+                                                @endforeach
                                             </b>
                                         </td>
+                                        <td>{{ $query->modified_event_time }}</td>
+                                        <td>{{ (new DateTime($query->modified_event_time))->format('l') }}</td>
                                         <td>
-                                            {{ $query->event_date }}
+                                            @if($query->in_time)
+                                                {{ \Carbon\Carbon::parse($query->in_time)->format('Y-m-d h:i A') }}
+                                            @else
+                                                NOT AVAILABLE
+                                            @endif
                                         </td>
                                         <td>
-                                            {{ (new DateTime($query->event_date))->format('l') }}
+                                            @if($query->modified_in_time && $query->modified_out_time && $query->in_time)
+                                                {{ outTime($query->modified_in_time, $query->modified_out_time,\Carbon\Carbon::parse($query->in_time)->format('Y-m-d h:i A') ) }}
+                                            @else
+                                                NOT AVAILABLE
+                                            @endif
                                         </td>
+                                        {{--                                        <td>{{ $query->total_in_count }} times</td>--}}
+                                        {{--                                        <td>{{ $query->total_out_count }} times</td>--}}
                                         <td>
-                                            {{ \Carbon\Carbon::parse($query->in_time)->format('h:i a') }}
-                                        </td>
-                                        <td>
-                                            {{ \Carbon\Carbon::parse($query->out_time)->format('h:i a') }}
-                                        </td>
-{{--                                        <td>--}}
-                                        {{--                                            {{ $query->in_count }}--}}
-                                        {{--                                        </td>--}}
-                                        {{--                                        <td>--}}
-                                        {{--                                            {{ $query->out_count }}--}}
-                                        {{--                                        </td>--}}
-                                        <td>
-                                            {{ totalHourWorked($query->in_time, $query->out_time) }}
+                                            @if($query->modified_in_time && $query->modified_out_time)
+                                                {{ totalHourWorked($query->modified_in_time, $query->modified_out_time) }}
+                                            @else
+                                                NOT AVAILABLE
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
