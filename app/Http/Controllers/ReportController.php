@@ -243,21 +243,19 @@ class ReportController extends Controller
             $query = DB::connection('odbc')->select("
     SELECT
         user_id,
-        user_name,
         CAST(DATEADD(HOUR, -6, event_time) AS DATE) AS modified_event_time,
         MIN(CASE WHEN terminal_name = 'FACE IN' THEN DATEADD(HOUR, -6, event_time) ELSE NULL END) AS modified_in_time,
         MAX(CASE WHEN terminal_name = 'FACE Out' THEN DATEADD(HOUR, -6, event_time) ELSE NULL END) AS modified_out_time,
         MIN(CASE WHEN terminal_name = 'FACE IN' THEN event_time ELSE NULL END) AS in_time,
         COUNT(CASE WHEN terminal_name = 'FACE IN' THEN 1 END) AS total_in_count,
         COUNT(CASE WHEN terminal_name = 'FACE Out' THEN 1 END) AS total_out_count
-        FROM
-        auth_logs_$yearMonth
-        $dateQuery
-        $userQuery
-        AND user_name <> ''
-        GROUP BY
-        user_id, user_name, CAST(DATEADD(HOUR, -6, event_time) AS DATE)
-        ORDER BY
+    FROM
+        auth_logs_$yearMonth AS outerLogs
+    $dateQuery
+    $userQuery
+    GROUP BY
+        user_id, CAST(DATEADD(HOUR, -6, event_time) AS DATE)
+    ORDER BY
         user_id
 ");
         }
