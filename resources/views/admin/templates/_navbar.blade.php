@@ -98,29 +98,29 @@
                             </ul>
                         </li>
 
-                        <li class="nav-item {{ (request()->routeIs('reports.daily.attendance') ? 'menu-open' : null ) }}">
-                            <a href="#"
-                               class="nav-link has-treeview {{ (request()->routeIs('reports.daily.attendance') ? 'active' : null ) }}">
-                                <i class="fab fa-dailymotion  nav-icon"></i>
-                                <p>
-                                    Daily Attendance
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                @foreach($monthNames as $monthName)
-                                    <li class="nav-item">
-                                        <a href="{{ route('reports.daily.attendance', $monthName) }}"
-                                           class="nav-link {{ ( str_contains(request()->fullUrl(), $monthName ) &&  request()->routeIs('reports.daily.attendance', $monthName)) ? 'active' : null  }}">
-                                            <i class="fas fa-calendar-check nav-icon"></i>
-                                            <p>
-                                                {{ $monthName }}
-                                            </p>
-                                        </a>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </li>
+                        {{--                        <li class="nav-item {{ (request()->routeIs('reports.daily.attendance') ? 'menu-open' : null ) }}">--}}
+                        {{--                            <a href="#"--}}
+                        {{--                               class="nav-link has-treeview {{ (request()->routeIs('reports.daily.attendance') ? 'active' : null ) }}">--}}
+                        {{--                                <i class="fab fa-dailymotion  nav-icon"></i>--}}
+                        {{--                                <p>--}}
+                        {{--                                    Daily Attendance--}}
+                        {{--                                    <i class="fas fa-angle-left right"></i>--}}
+                        {{--                                </p>--}}
+                        {{--                            </a>--}}
+                        {{--                            <ul class="nav nav-treeview">--}}
+                        {{--                                @foreach($monthNames as $monthName)--}}
+                        {{--                                    <li class="nav-item">--}}
+                        {{--                                        <a href="{{ route('reports.daily.attendance', $monthName) }}"--}}
+                        {{--                                           class="nav-link {{ ( str_contains(request()->fullUrl(), $monthName ) &&  request()->routeIs('reports.daily.attendance', $monthName)) ? 'active' : null  }}">--}}
+                        {{--                                            <i class="fas fa-calendar-check nav-icon"></i>--}}
+                        {{--                                            <p>--}}
+                        {{--                                                {{ $monthName }}--}}
+                        {{--                                            </p>--}}
+                        {{--                                        </a>--}}
+                        {{--                                    </li>--}}
+                        {{--                                @endforeach--}}
+                        {{--                            </ul>--}}
+                        {{--                        </li>--}}
 
                         <li class="nav-item ">
                             <a href="{{ route('reports.user.attendance') }}"
@@ -210,24 +210,24 @@
                 {{--                </li>--}}
 
 
-{{--                <li class="nav-item has-treeview {{ (request()->routeIs('employees.*') ? 'menu-open' : null ) }}">--}}
-{{--                    <a href="#" class="nav-link {{ (request()->routeIs('employees.*') ? 'active' : null ) }}">--}}
-{{--                        <i class="nav-icon fas fa-user"></i>--}}
-{{--                        <p>--}}
-{{--                            Emoloyees--}}
-{{--                            <i class="right fas fa-angle-left"></i>--}}
-{{--                        </p>--}}
-{{--                    </a>--}}
-{{--                    <ul class="nav nav-treeview">--}}
-{{--                        <li class="nav-item">--}}
-{{--                            <a href="{{ route('employees.index') }}"--}}
-{{--                               class="nav-link {{ (request()->routeIs('employees.index') ? 'active' : null ) }}">--}}
-{{--                                <i class="far fa-circle nav-icon"></i>--}}
-{{--                                <p>Employees List</p>--}}
-{{--                            </a>--}}
-{{--                        </li>--}}
-{{--                    </ul>--}}
-{{--                </li>--}}
+                {{--                <li class="nav-item has-treeview {{ (request()->routeIs('employees.*') ? 'menu-open' : null ) }}">--}}
+                {{--                    <a href="#" class="nav-link {{ (request()->routeIs('employees.*') ? 'active' : null ) }}">--}}
+                {{--                        <i class="nav-icon fas fa-user"></i>--}}
+                {{--                        <p>--}}
+                {{--                            Emoloyees--}}
+                {{--                            <i class="right fas fa-angle-left"></i>--}}
+                {{--                        </p>--}}
+                {{--                    </a>--}}
+                {{--                    <ul class="nav nav-treeview">--}}
+                {{--                        <li class="nav-item">--}}
+                {{--                            <a href="{{ route('employees.index') }}"--}}
+                {{--                               class="nav-link {{ (request()->routeIs('employees.index') ? 'active' : null ) }}">--}}
+                {{--                                <i class="far fa-circle nav-icon"></i>--}}
+                {{--                                <p>Employees List</p>--}}
+                {{--                            </a>--}}
+                {{--                        </li>--}}
+                {{--                    </ul>--}}
+                {{--                </li>--}}
 
                 {{--                <li class="nav-item has-treeview {{ (request()->routeIs('reports.*') ? 'menu-open' : null ) }}">--}}
                 {{--                    <a href="#" class="nav-link {{ (request()->routeIs('reports.*') ? 'active' : null ) }}">--}}

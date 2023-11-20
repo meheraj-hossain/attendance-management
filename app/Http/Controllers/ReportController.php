@@ -250,7 +250,7 @@ class ReportController extends Controller
         COUNT(CASE WHEN terminal_name = 'FACE IN' THEN 1 END) AS total_in_count,
         COUNT(CASE WHEN terminal_name = 'FACE Out' THEN 1 END) AS total_out_count
     FROM
-        auth_logs_$yearMonth AS outerLogs
+        auth_logs_$yearMonth
     $dateQuery
     $userQuery
     GROUP BY

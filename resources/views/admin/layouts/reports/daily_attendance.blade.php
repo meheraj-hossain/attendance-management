@@ -115,8 +115,8 @@
                                 <th>Day</th>
                                 <th>In Time</th>
                                 <th>Out Time</th>
-                                <th>Total In Time</th>
-                                <th>Total Out Time</th>
+{{--                                <th>Total In Time</th>--}}
+{{--                                <th>Total Out Time</th>--}}
                                 <th>Total Hour Worked</th>
                             </tr>
                             </thead>
@@ -147,12 +147,12 @@
                                         <td>
                                             {{ \Carbon\Carbon::parse($query->out_time)->format('h:i a') }}
                                         </td>
-                                        <td>
-                                            {{ $query->in_count }}
-                                        </td>
-                                        <td>
-                                            {{ $query->out_count }}
-                                        </td>
+{{--                                        <td>--}}
+                                        {{--                                            {{ $query->in_count }}--}}
+                                        {{--                                        </td>--}}
+                                        {{--                                        <td>--}}
+                                        {{--                                            {{ $query->out_count }}--}}
+                                        {{--                                        </td>--}}
                                         <td>
                                             {{ totalHourWorked($query->in_time, $query->out_time) }}
                                         </td>

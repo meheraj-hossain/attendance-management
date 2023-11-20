@@ -133,8 +133,8 @@
                                 <th>Day</th>
                                 <th>In Time</th>
                                 <th>Out Time</th>
-                                <th>Total In Time</th>
-                                <th>Total Out Time</th>
+{{--                                <th>Total In Time</th>--}}
+                                {{--                                <th>Total Out Time</th>--}}
                                 <th>Total Hour Worked</th>
                             </tr>
                             </thead>
@@ -157,8 +157,8 @@
                                         <td>{{ (new DateTime($user_attendance->modified_event_time))->format('l') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($user_attendance->in_time)->format('Y-m-d h:i A') }}</td>
                                         <td>{{ outTime($user_attendance->modified_in_time, $user_attendance->modified_out_time,\Carbon\Carbon::parse($user_attendance->in_time)->format('Y-m-d h:i A') ) }}</td>
-                                        <td>{{ $user_attendance->total_in_count }} times</td>
-                                        <td>{{ $user_attendance->total_out_count }} times</td>
+{{--                                        <td>{{ $user_attendance->total_in_count }} times</td>--}}
+{{--                                        <td>{{ $user_attendance->total_out_count }} times</td>--}}
                                         <td>{{ totalHourWorked($user_attendance->modified_in_time, $user_attendance->modified_out_time) }}</td>
                                     </tr>
                                 @endforeach
