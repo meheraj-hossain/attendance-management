@@ -36,6 +36,23 @@ function totalHourWorked($in_Time, $out_Time)
     return $totalHours . ' Hours and ' . $totalMinutes . ' minutes';
 }
 
+ function outTime($modified_In_Time, $modified_Out_Time, $in_Time  ) {
+     $modifiedInTime  = new DateTime($modified_In_Time);
+     $modifiedOutTime = new DateTime($modified_Out_Time);
+     $timeDifference = $modifiedOutTime->diff($modifiedInTime);
+
+     $totalHours   = $timeDifference->h;
+     $totalMinutes = $timeDifference->i;
+
+     $inTime = $in_Time;
+     $carbonInTime = \Carbon\Carbon::parse($inTime);
+     $outTime = ($carbonInTime->addHours($totalHours)->addMinutes($totalMinutes))->format('Y-m-d h:i A');
+
+     return $outTime;
+
+
+ }
+
 function fetchUser()
 {
     return DB::connection('odbc')->select("SELECT user_id, name FROM users GROUP BY user_id, name ORDER BY user_id ASC");

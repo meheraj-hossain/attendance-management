@@ -153,13 +153,13 @@
                                                 @endforeach
                                             </b>
                                         </td>
-                                        <td>{{ $user_attendance->event_date }}</td>
-                                        <td>{{ (new DateTime($user_attendance->event_date))->format('l') }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($user_attendance->in_time)->format('h:i a') }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($user_attendance->out_time)->format('h:i a') }}</td>
-                                        <td>{{ $user_attendance->in_count }} times</td>
-                                        <td>{{ $user_attendance->out_count }} times</td>
-                                        <td>{{ totalHourWorked($user_attendance->in_time, $user_attendance->out_time) }}</td>
+                                        <td>{{ $user_attendance->modified_event_time }}</td>
+                                        <td>{{ (new DateTime($user_attendance->modified_event_time))->format('l') }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($user_attendance->in_time)->format('Y-m-d h:i A') }}</td>
+                                        <td>{{ outTime($user_attendance->modified_in_time, $user_attendance->modified_out_time,\Carbon\Carbon::parse($user_attendance->in_time)->format('Y-m-d h:i A') ) }}</td>
+                                        <td>{{ $user_attendance->total_in_count }} times</td>
+                                        <td>{{ $user_attendance->total_out_count }} times</td>
+                                        <td>{{ totalHourWorked($user_attendance->modified_in_time, $user_attendance->modified_out_time) }}</td>
                                     </tr>
                                 @endforeach
                             @endif

@@ -178,7 +178,7 @@ class ReportController extends Controller
         $data['users'] = DB::connection('odbc')->select("SELECT user_id, name FROM users GROUP BY user_id, name ORDER BY user_id ASC");
 
         $data['daily_attendance_reports'] = DB::connection('odbc')
-                                                ->select("SELECT
+                                              ->select("SELECT
                 b.user_id,
                 MAX(b.user_name) AS user_name,
                 b.event_date,
@@ -241,23 +241,30 @@ class ReportController extends Controller
 
         if ($request->date_from || $request->date_to || $request->user_id) {
             $query = DB::connection('odbc')->select("
-            SELECT user_id, user_name,
-       CAST(event_time AS DATE) AS event_date,
-       MIN(CASE WHEN terminal_name = 'FACE IN' THEN event_time ELSE NULL END) AS in_time,
-	   MAX(CASE WHEN terminal_name = 'FACE Out' THEN event_time ELSE NULL END) AS out_time,
-	   COUNT(CASE WHEN terminal_name = 'FACE IN' THEN 1 ELSE NULL END) AS in_count,
-	   COUNT(CASE WHEN terminal_name = 'FACE Out' THEN 1 ELSE NULL END) AS out_count
-FROM auth_logs_$yearMonth
-$dateQuery
-$userQuery
-AND user_name <> ''
-GROUP BY user_id, CAST(event_time AS DATE), user_name
-ORDER BY user_id
-            ");
+    SELECT
+        user_id,
+        user_name,
+        CAST(DATEADD(HOUR, -6, event_time) AS DATE) AS modified_event_time,
+        MIN(CASE WHEN terminal_name = 'FACE IN' THEN DATEADD(HOUR, -6, event_time) ELSE NULL END) AS modified_in_time,
+        MAX(CASE WHEN terminal_name = 'FACE Out' THEN DATEADD(HOUR, -6, event_time) ELSE NULL END) AS modified_out_time,
+        MIN(CASE WHEN terminal_name = 'FACE IN' THEN event_time ELSE NULL END) AS in_time,
+        COUNT(CASE WHEN terminal_name = 'FACE IN' THEN 1 END) AS total_in_count,
+        COUNT(CASE WHEN terminal_name = 'FACE Out' THEN 1 END) AS total_out_count
+        FROM
+        auth_logs_$yearMonth
+        $dateQuery
+        $userQuery
+        AND user_name <> ''
+        GROUP BY
+        user_id, user_name, CAST(DATEADD(HOUR, -6, event_time) AS DATE)
+        ORDER BY
+        user_id
+");
         }
 
         $data['title']            = 'User Attendance Report';
         $data['users_attendance'] = $query;
+//        dd($data['users_attendance']);
         return view('admin.layouts.reports.user_attendance', $data);
     }
 
