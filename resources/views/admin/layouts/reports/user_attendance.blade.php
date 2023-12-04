@@ -129,6 +129,7 @@
                                 <th>Serial</th>
                                 <th>User ID</th>
                                 <th>User Name</th>
+                                <th>Department Name</th>
                                 <th>Date</th>
                                 <th>Day</th>
                                 <th>In Time</th>
@@ -146,12 +147,19 @@
                                         <td>{{ $query->user_id }}</td>
                                         <td>
                                             <b>
-                                                @foreach(fetchUser() as $user)
-                                                    @if($user->user_id == $query->user_id)
-                                                        <b>{{ $user->name }}</b>
-                                                    @endif
-                                                @endforeach
+                                                @if(fetchUserById($query->user_id))
+                                                    {{ fetchUserById($query->user_id)}}
+                                                @else
+                                                    NOT AVAILABLE
+                                                @endif
                                             </b>
+                                        </td>
+                                        <td>
+                                            @if(fetchDepartmentByUser($query->user_id))
+                                                {{ fetchDepartmentByUser($query->user_id) }}
+                                            @else
+                                                NOT AVAILABLE
+                                            @endif
                                         </td>
                                         <td>{{ $query->modified_event_time }}</td>
                                         <td>{{ (new DateTime($query->modified_event_time))->format('l') }}</td>

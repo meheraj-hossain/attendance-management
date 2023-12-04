@@ -62,13 +62,12 @@
                     </div>
                     <div class="col-12 col-lg-2">
                         <div class="form-group">
-                            <label>User ID</label>
-                            <select id="user_id" name="user_id" class="form-control select2bs4" style="width: 100%;">
-                                <option value="">Select a User Id</option>
-                                @foreach(fetchUser() as $user)
-                                    <option @if(request()->get('user_id') == $user->user_id)  selected @endif
-                                    value="{{ $user->user_id }}">{{ $user->user_id }} ({{ $user->name }}
-                                        )
+                            <label>Department</label>
+                            <select id="department" name="department" class="form-control select2bs4" style="width: 100%;">
+                                <option value="">Select a Department</option>
+                                @foreach(fetchDepartment() as $query)
+                                    <option @if(request()->get('department') == $query->department)  selected @endif
+                                    value="{{ $query->department }}">{{ $query->department }}
                                     </option>
                                 @endforeach
                             </select>
@@ -110,6 +109,7 @@
                                 <th>Serial</th>
                                 <th>User ID</th>
                                 <th>User Name</th>
+                                <th>Department Name</th>
                                 <th>Total Attendance</th>
                             </tr>
                             </thead>
@@ -123,12 +123,19 @@
                                         </td>
                                         <td>
                                             <b>
-                                                @foreach(fetchUser() as $user)
-                                                    @if($user->user_id == $monthly_attendance_report->user_id)
-                                                        <b>{{ $user->name }}</b>
-                                                    @endif
-                                                @endforeach
+                                                @if(fetchUserById($monthly_attendance_report->user_id))
+                                                    {{ fetchUserById($monthly_attendance_report->user_id)}}
+                                                @else
+                                                    NOT AVAILABLE
+                                                @endif
                                             </b>
+                                        </td>
+                                        <td>
+                                            @if(fetchDepartmentByUser($monthly_attendance_report->user_id))
+                                                {{ fetchDepartmentByUser($monthly_attendance_report->user_id) }}
+                                            @else
+                                                NOT AVAILABLE
+                                            @endif
                                         </td>
                                         <td>
                                             {{ $monthly_attendance_report->days_attended }} days

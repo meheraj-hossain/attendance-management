@@ -36,27 +36,48 @@ function totalHourWorked($in_Time, $out_Time)
     return $totalHours . ' Hours and ' . $totalMinutes . ' minutes';
 }
 
- function outTime($modified_In_Time, $modified_Out_Time, $in_Time  ) {
-     $modifiedInTime  = new DateTime($modified_In_Time);
-     $modifiedOutTime = new DateTime($modified_Out_Time);
-     $timeDifference = $modifiedOutTime->diff($modifiedInTime);
+function outTime($modified_In_Time, $modified_Out_Time, $in_Time)
+{
+    $modifiedInTime  = new DateTime($modified_In_Time);
+    $modifiedOutTime = new DateTime($modified_Out_Time);
+    $timeDifference  = $modifiedOutTime->diff($modifiedInTime);
 
-     $totalHours   = $timeDifference->h;
-     $totalMinutes = $timeDifference->i;
+    $totalHours   = $timeDifference->h;
+    $totalMinutes = $timeDifference->i;
 
-     $inTime = $in_Time;
-     $carbonInTime = \Carbon\Carbon::parse($inTime);
-     $outTime = ($carbonInTime->addHours($totalHours)->addMinutes($totalMinutes))->format('Y-m-d h:i A');
+    $inTime       = $in_Time;
+    $carbonInTime = \Carbon\Carbon::parse($inTime);
+    $outTime      = ($carbonInTime->addHours($totalHours)->addMinutes($totalMinutes))->format('Y-m-d h:i A');
 
-     return $outTime;
-
-
- }
+    return $outTime;
+}
 
 function fetchUser()
 {
     return DB::connection('odbc')->select("SELECT user_id, name FROM users GROUP BY user_id, name ORDER BY user_id ASC");
 }
+
+function fetchDepartmentByUser($user_id)
+{
+    $result = DB::connection('odbc')->select("SELECT department FROM users WHERE user_id = '$user_id'");
+
+    return $result[0]->department;
+}
+
+function fetchUserById($user_id)
+{
+    $result = DB::connection('odbc')->select("SELECT name FROM users WHERE user_id = '$user_id'");
+
+    return $result[0]->name;
+}
+
+function fetchDepartment()
+{
+    return DB::connection('odbc')
+             ->select("SELECT department FROM users WHERE department <> '' GROUP BY department ORDER BY department ASC");
+}
+
+
 
 //function monthNameToNumeric($monthName)
 //{

@@ -62,13 +62,13 @@
                     </div>
                     <div class="col-12 col-lg-2">
                         <div class="form-group">
-                            <label>User ID</label>
-                            <select id="user_id" name="user_id" class="form-control select2bs4" style="width: 100%;">
-                                <option value="">Select a User Id</option>
-                                @foreach(fetchUser() as $user)
-                                    <option @if(request()->get('user_id') == $user->user_id)  selected @endif
-                                    value="{{ $user->user_id }}">{{ $user->user_id }} ({{ $user->name }}
-                                        )
+                            <label>Department</label>
+                            <select id="department" name="department" class="form-control select2bs4"
+                                    style="width: 100%;">
+                                <option value="">Select a Department</option>
+                                @foreach(fetchDepartment() as $query)
+                                    <option @if(request()->get('department') == $query->department)  selected @endif
+                                    value="{{ $query->department }}">{{ $query->department }}
                                     </option>
                                 @endforeach
                             </select>
@@ -111,6 +111,7 @@
                                 <th>Serial</th>
                                 <th>User ID</th>
                                 <th>User Name</th>
+                                <th>Department Name</th>
                                 <th>Date</th>
                                 <th>Day</th>
                                 <th>In Time</th>
@@ -128,12 +129,19 @@
                                         <td>{{ $query->user_id }}</td>
                                         <td>
                                             <b>
-                                                @foreach(fetchUser() as $user)
-                                                    @if($user->user_id == $query->user_id)
-                                                        <b>{{ $user->name }}</b>
-                                                    @endif
-                                                @endforeach
+                                                @if(fetchUserById($query->user_id))
+                                                    {{ fetchUserById($query->user_id)}}
+                                                @else
+                                                    NOT AVAILABLE
+                                                @endif
                                             </b>
+                                        </td>
+                                        <td>
+                                            @if(fetchDepartmentByUser($query->user_id))
+                                                {{ fetchDepartmentByUser($query->user_id) }}
+                                            @else
+                                                NOT AVAILABLE
+                                            @endif
                                         </td>
                                         <td>{{ $query->modified_event_time }}</td>
                                         <td>{{ (new DateTime($query->modified_event_time))->format('l') }}</td>
