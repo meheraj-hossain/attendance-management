@@ -14,7 +14,7 @@ class TableNameToMonthName
         $allTableNames = DB::connection('odbc')->select("SELECT table_name
                                                             FROM information_schema.tables
                                                             WHERE table_name LIKE 'auth_logs_%'");
-        $frontTableNames = array_slice($allTableNames, 2, 4 );
+        $frontTableNames = array_slice($allTableNames, 2 );
         $tableNames = array_reverse($frontTableNames);
         $monthNames = [];
         foreach ($tableNames as $table) {
@@ -31,6 +31,32 @@ class TableNameToMonthName
                 $monthNames[$tableName] = $monthName;
             }
         }
+
         return $monthNames;
+    }
+
+    public function arrayTables()
+    {
+        $allTableNames   = DB::connection('odbc')->select("SELECT table_name
+                                                            FROM information_schema.tables
+                                                            WHERE table_name LIKE 'auth_logs_%'");
+        $frontTableNames = array_slice($allTableNames, 2);
+        $tableNames      = array_reverse($frontTableNames);
+        $tables          = [];
+        foreach ($tableNames as $tableNameObject) {
+            $tables[] = $tableNameObject->table_name;
+        }
+
+        return $tables;
+    }
+
+    function generatePresentMonthTableName() {
+        // Get the current year and month
+        $currentYearMonth = date('Ym');
+
+        // Construct the table name
+        $tableName = "auth_logs_" . $currentYearMonth;
+
+        return $tableName;
     }
 }

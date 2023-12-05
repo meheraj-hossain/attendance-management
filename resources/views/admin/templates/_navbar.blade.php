@@ -1,8 +1,3 @@
-@php
-    $monthNames = app('TableNameToMonthName')->getMonthNameFromDatabase();
-@endphp
-
-
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="{{ route('dashboard') }}" class="brand-link">
@@ -74,52 +69,24 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item {{ (request()->routeIs('reports.monthly.attendance') ? 'menu-open' : null ) }}">
-                            <a href="#"
-                               class="nav-link has-treeview {{ (request()->routeIs('reports.monthly.attendance') ? 'active' : null ) }}">
+                        <li class="nav-item ">
+                            <a href="{{ route('reports.monthly.attendance') }}"
+                               class="nav-link {{ ( request()->routeIs('reports.monthly.attendance')) ? 'active' : null  }}">
                                 <i class="fas fa-calendar-alt  nav-icon"></i>
                                 <p>
                                     Monthly Attendance
-                                    <i class="fas fa-angle-left right"></i>
                                 </p>
                             </a>
-                            <ul class="nav nav-treeview">
-                                @foreach($monthNames as $monthName)
-                                    <li class="nav-item">
-                                        <a href="{{ route('reports.monthly.attendance', $monthName) }}"
-                                           class="nav-link {{ ( str_contains(request()->fullUrl(), $monthName ) &&  request()->routeIs('reports.monthly.attendance', $monthName)) ? 'active' : null  }}">
-                                            <i class="fas fa-calendar-check nav-icon"></i>
-                                            <p>
-                                                {{ $monthName }}
-                                            </p>
-                                        </a>
-                                    </li>
-                                @endforeach
-                            </ul>
                         </li>
 
-                        <li class="nav-item {{ (request()->routeIs('reports.daily.attendance') ? 'menu-open' : null ) }}">
-                            <a href="#"
-                               class="nav-link has-treeview {{ (request()->routeIs('reports.daily.attendance') ? 'active' : null ) }}">
+                        <li class="nav-item ">
+                            <a href="{{ route('reports.daily.attendance') }}"
+                               class="nav-link {{ ( request()->routeIs('reports.daily.attendance')) ? 'active' : null  }}">
                                 <i class="fab fa-dailymotion  nav-icon"></i>
                                 <p>
                                     Daily Attendance
-                                    <i class="fas fa-angle-left right"></i>
                                 </p>
                             </a>
-                            <ul class="nav nav-treeview">
-                                @foreach($monthNames as $monthName)
-                                    <li class="nav-item">
-                                        <a href="{{ route('reports.daily.attendance', $monthName) }}"
-                                           class="nav-link {{ ( str_contains(request()->fullUrl(), $monthName ) &&  request()->routeIs('reports.daily.attendance', $monthName)) ? 'active' : null  }}">
-                                            <i class="fas fa-calendar-check nav-icon"></i>
-                                            <p>
-                                                {{ $monthName }}
-                                            </p>
-                                        </a>
-                                    </li>
-                                @endforeach
-                            </ul>
                         </li>
 
                         <li class="nav-item ">

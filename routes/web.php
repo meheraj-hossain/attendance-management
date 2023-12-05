@@ -34,11 +34,11 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
         Route::resource('users', UserController::class);
         Route::get('employees', [EmployeeController::class, 'index'])->name('employees.index');
 
-        Route::get('reports/monthly-attendance/{monthName}', [
+        Route::get('reports/monthly-attendance', [
             ReportController::class, 'monthly_attendance'
         ])->name('reports.monthly.attendance');
 
-        Route::get('reports/daily-attendance/{monthName}', [
+        Route::get('reports/daily-attendance', [
             ReportController::class, 'daily_attendance'
         ])->name('reports.daily.attendance');
 

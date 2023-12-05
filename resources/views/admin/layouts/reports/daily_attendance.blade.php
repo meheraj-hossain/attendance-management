@@ -38,11 +38,11 @@
 @endpush
 
 @section('content')
-    <form action="{{ route('reports.daily.attendance', $month_name) }}" method="get">
+    <form action="{{ route('reports.daily.attendance') }}" method="get">
         <div class="search-bar">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-12 col-lg-4">
+                    <div class="col-12 col-lg-2">
                         <div class="form-group">
                             <label>Date From:</label>
                             <input type="text" id="datepicker_from" name="date_from"
@@ -51,13 +51,75 @@
                                    id="date_from">
                         </div>
                     </div>
-                    <div class="col-12 col-lg-4">
+                    <div class="col-12 col-lg-2">
                         <div class="form-group">
                             <label>Date To:</label>
                             <input type="text" id="datepicker_to" name="date_to"
                                    value="{{ request()->get('date_to') }}"
                                    class="form-control"
                                    id="date_to">
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-2">
+                        <div class="form-group">
+                            <label>Month</label>
+                            <span class=" badge badge-danger">Required</span>
+                            <select id="month" name="month" class="form-control select2bs4" style="width: 100%;">
+                                <option value="">
+                                    Select a Month
+                                </option>
+                                <option @if(request()->get('month') == 12) selected @endif value="12">
+                                    December
+                                </option>
+                                <option @if(request()->get('month') == 11) selected @endif value="11">
+                                    November
+                                </option>
+                                <option @if(request()->get('month') == 10) selected @endif value="10">
+                                    October
+                                </option>
+                                <option @if(request()->get('month') == 9) selected @endif value="09">
+                                    September
+                                </option>
+                                <option @if(request()->get('month') == 8) selected @endif value="08">
+                                    August
+                                </option>
+                                <option @if(request()->get('month') == 7) selected @endif value="07">
+                                    July
+                                </option>
+                                <option @if(request()->get('month') == 6) selected @endif value="06">
+                                    June
+                                </option>
+                                <option @if(request()->get('month') == 5) selected @endif value="05">
+                                    May
+                                </option>
+                                <option @if(request()->get('month') == 4) selected @endif value="04">
+                                    April
+                                </option>
+                                <option @if(request()->get('month') == 3) selected @endif value="03">
+                                    March
+                                </option>
+                                <option @if(request()->get('month') == 2) selected @endif value="02">
+                                    February
+                                </option>
+                                <option @if(request()->get('month') == 1) selected @endif value="01">
+                                    January
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-2">
+                        <div class="form-group">
+                            <label>Year</label>
+                            <span class=" badge badge-danger">Required</span>
+                            <select id="year" name="year" class="form-control select2bs4" style="width: 100%;">
+                                <option value="">
+                                    Select a Year
+                                </option>
+                                @for( $i = 2023; $i <= 2028; $i++)
+                                    <option @if(request()->get('year') == $i) selected
+                                            @endif value="{{ $i }}"> {{ $i }}</option>
+                                @endfor
+                            </select>
                         </div>
                     </div>
                     <div class="col-12 col-lg-2">
@@ -86,7 +148,7 @@
                     <div class="col-12 col-lg-1">
                         <div class="form-group">
                             <label class="invisible">Refresh</label>
-                            <a href="{{ route('reports.daily.attendance', $month_name) }}"
+                            <a href="{{ route('reports.daily.attendance') }}"
                                class="form-control btn btn-danger">
                                 <i class="fas fa-sync-alt"></i>
                                 Refresh
