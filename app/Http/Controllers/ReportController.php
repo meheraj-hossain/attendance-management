@@ -118,77 +118,31 @@ class ReportController extends Controller
 
         $query = DB::connection('odbc')
                    ->select("
-                        SELECT
-                b.user_id,
-                u.department,
-                b.month_name,
-                COUNT(DISTINCT CAST(b.event_time AS DATE)) AS days_attended
-            FROM (
-                SELECT
-                    a.user_id,
-                    a.event_time,
-                    DATEPART(mm, a.event_time) AS month_name
-                FROM (
-                    SELECT
-                        u.user_id,
-                        CAST(al.event_time AS DATETIME) AS event_time
-                    FROM
-                        $initialDatabaseName al
-                    JOIN
-                        users u ON al.user_id = u.user_id
-                    WHERE
-                        al.user_name <> ''
-                        $dateQuery
-                        $department
-                ) a
-                GROUP BY
-                    a.user_id, a.event_time
-            ) b
-            JOIN
-                users u ON b.user_id = u.user_id
-            GROUP BY
-                b.user_id, u.department, b.month_name
-            ORDER BY
-                b.month_name ASC;
-                ");
+                                    SELECT a.user_id,  u.department, COUNT(DISTINCT CAST(DATEADD(HOUR, -6, a.event_time) AS DATE)) AS days_attended
+                                    FROM $initialDatabaseName a
+                                    JOIN users u ON a.user_id = u.user_id
+                                    WHERE a.user_name <> ''
+                                    AND CAST(DATEADD(HOUR, -6, event_time) AS DATE) >= '" . date('Y-m-01') . "'
+                                    AND u.department <> ''
+                                    $dateQuery
+                                    $department
+                                    GROUP BY a.user_id, u.department ORDER BY u.department, a.user_id ASC
+");
 
         if ($request->date_from || $request->date_to || $request->department || $request->year || $request->month) {
             if (in_array($databaseName, app('TableNameToMonthName')->arrayTables())) {
                 $query = DB::connection('odbc')
                            ->select("
-                        SELECT
-                b.user_id,
-                u.department,
-                b.month_name,
-                COUNT(DISTINCT CAST(b.event_time AS DATE)) AS days_attended
-            FROM (
-                SELECT
-                    a.user_id,
-                    a.event_time,
-                    DATEPART(mm, a.event_time) AS month_name
-                FROM (
-                    SELECT
-                        u.user_id,
-                        CAST(al.event_time AS DATETIME) AS event_time
-                    FROM
-                        $databaseName al
-                    JOIN
-                        users u ON al.user_id = u.user_id
-                    WHERE
-                        al.user_name <> ''
-                        $dateQuery
-                        $department
-                ) a
-                GROUP BY
-                    a.user_id, a.event_time
-            ) b
-            JOIN
-                users u ON b.user_id = u.user_id
-            GROUP BY
-                b.user_id, u.department, b.month_name
-            ORDER BY
-                b.month_name ASC;
-                ");
+                                            SELECT a.user_id,  u.department, COUNT(DISTINCT CAST(DATEADD(HOUR, -6, a.event_time) AS DATE)) AS days_attended
+                                            FROM $databaseName a
+                                            JOIN users u ON a.user_id = u.user_id
+                                            WHERE a.user_name <> ''
+                                            AND CAST(DATEADD(HOUR, -6, event_time) AS DATE) >= '" . $year . '-' . $month . '-' . '01' . "'
+                                            AND u.department <> ''
+                                            $dateQuery
+                                            $department
+                                            GROUP BY a.user_id, u.department ORDER BY u.department, a.user_id ASC
+");
             } else {
                 Alert::error('Error', 'Please select a valid Month and Year!');
 
@@ -198,6 +152,7 @@ class ReportController extends Controller
 
         $data['title']                      = ($request->year && $request->month) ? 'Monthly Attendance Report of ' . date('F', mktime(0, 0, 0, $request->month, 1)) . '-' . $request->year : 'Monthly Attendance Report of ' . date('F-Y');
         $data['monthly_attendance_reports'] = $query;
+//        dd($data['monthly_attendance_reports']);
 
         return view('admin.layouts.reports.monthly_attendance', $data);
     }
@@ -347,6 +302,28 @@ class ReportController extends Controller
         $data['users_attendance'] = $query;
 
         return view('admin.layouts.reports.user_attendance', $data);
+    }
+
+    public function monthly_attendance2(Request $request)
+    {
+        $department             = [];
+        $departments_from_users = DB::connection('odbc')->select("SELECT department FROM users WHERE department <> '' AND department IN ( 'Reporting','IT') GROUP BY department ORDER BY department ASC");
+        foreach ($departments_from_users as $department_from_users) {
+            $department[] = $department_from_users->department;
+        }
+        $query                               = DB::connection('odbc')->select(
+            "SELECT a.user_id,  u.department, COUNT(DISTINCT CAST(DATEADD(HOUR, -6, a.event_time) AS DATE)) AS days_attended
+FROM auth_logs_202312 a
+JOIN users u ON a.user_id = u.user_id
+WHERE a.user_name <> ''
+AND CAST(DATEADD(HOUR, -6, event_time) AS DATE) >= '2023-12-01'
+AND u.department <> ''
+AND u.department IN ('IT')
+GROUP BY a.user_id, u.department ORDER BY u.department, a.user_id ASC"
+        );
+        $data['title']                       = 'Monthly Attendance2 Report';
+        $data['monthly_attendance2_reports'] = $query;
+        return view('admin.layouts.reports.monthly_attendance2', $data);
     }
 
 }

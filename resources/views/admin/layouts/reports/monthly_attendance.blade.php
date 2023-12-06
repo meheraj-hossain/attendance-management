@@ -34,12 +34,24 @@
             font-weight: normal !important;
             color: #454545 !important;
         }
+
+        @media print {
+            .dataTables_filter, footer, .example1_paginate, .example1_info {
+                display: none;
+            }
+
+            table {
+                border-collapse: collapse !important;
+                border:1px solid #dee2e6;
+
+            }
+        }
     </style>
 @endpush
 
 @section('content')
     <form action="{{ route('reports.monthly.attendance') }}" method="get">
-        <div class="search-bar">
+        <div class="search-bar d-print-none">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12 col-lg-2">
@@ -165,46 +177,44 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <table id="example1" class="table table-bordered table-striped">
+                        <table id="example1" class="table table-striped table-bordered">
                             <thead>
                             <tr>
                                 <th>Serial</th>
                                 <th>User ID</th>
                                 <th>User Name</th>
-                                <th>Department Name</th>
                                 <th>Total Attendance</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @if($monthly_attendance_reports)
-                                @foreach($monthly_attendance_reports as $key => $monthly_attendance_report)
+                            @php
+                                $currentDepartment = null;
+                                $departmentId = 0;
+                                $departmentCounters = [];
+                            @endphp
+
+                            @foreach ($monthly_attendance_reports as $item)
+                                @if ($currentDepartment !== $item->department)
+                                    @php
+                                        $currentDepartment = $item->department;
+                                        $departmentId++;
+                                        $departmentCounters[$currentDepartment] = 0; // Reset the department-specific counter
+                                    @endphp
                                     <tr>
-                                        <td>{{ ++$key }}</td>
-                                        <td>
-                                            {{ $monthly_attendance_report->user_id }}
-                                        </td>
-                                        <td>
-                                            <b>
-                                                @if(fetchUserById($monthly_attendance_report->user_id))
-                                                    {{ fetchUserById($monthly_attendance_report->user_id)}}
-                                                @else
-                                                    NOT AVAILABLE
-                                                @endif
-                                            </b>
-                                        </td>
-                                        <td>
-                                            @if(fetchDepartmentByUser($monthly_attendance_report->user_id))
-                                                {{ fetchDepartmentByUser($monthly_attendance_report->user_id) }}
-                                            @else
-                                                NOT AVAILABLE
-                                            @endif
-                                        </td>
-                                        <td>
-                                            {{ $monthly_attendance_report->days_attended }} days
-                                        </td>
+                                        <td colspan="4" class="text-danger bg-danger"><strong>{{ $departmentId }} - {{ $currentDepartment }}</strong></td>
+                                        <td class="d-none d-print-none"></td>
+                                        <td class="d-none d-print-none"></td>
                                     </tr>
-                                @endforeach
-                            @endif
+                                @endif
+                                <tr>
+                                    <td>
+                                        {{ ++$departmentCounters[$currentDepartment] }}
+                                    </td>
+                                    <td>{{ $item->user_id }}</td>
+                                    <td><b>{{ fetchUserById($item->user_id) ?? 'NOT AVAILABLE' }}</b></td>
+                                    <td>{{ $item->days_attended }} days</td>
+                                </tr>
+                            @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -255,13 +265,16 @@
 
     <!-- Page specific script -->
     <script>
-        $(function () {
-            $("#example1").DataTable({
-                "responsive": true, "lengthChange": false, "autoWidth": false, "pageLength": 500, "oLanguage": {
-                    "sSearch": "Quick Search"
-                },
-                "buttons": ["copy", "csv", "excel", "pdf", "print"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        $(document).ready(function () {
+            $('#example1').DataTable({
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "paging": false,
+                "info": false,
+                "ordering": false,
+            });
         });
     </script>
+
 @endpush

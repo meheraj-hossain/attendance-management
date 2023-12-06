@@ -45,5 +45,9 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
         Route::get('reports/user-attendance', [
             ReportController::class, 'user_attendance'
         ])->name('reports.user.attendance');
+
+        Route::get('reports/monthly-attendance2', [
+            ReportController::class, 'monthly_attendance2'
+        ])->name('reports.monthly.attendance2');
     });
 });
