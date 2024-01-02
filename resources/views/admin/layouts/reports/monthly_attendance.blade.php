@@ -1,11 +1,11 @@
 @extends('admin.templates.master')
 
 @push('css')
-    <!-- DataTables -->
-    <link rel="stylesheet" href="{{ asset('admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-    <link rel="stylesheet"
-          href="{{ asset('admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+    {{--    <!-- DataTables -->--}}
+    {{--    <link rel="stylesheet" href="{{ asset('admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">--}}
+    {{--    <link rel="stylesheet"--}}
+    {{--          href="{{ asset('admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">--}}
+    {{--    <link rel="stylesheet" href="{{ asset('admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">--}}
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 
     <!-- Select2 -->
@@ -36,15 +36,6 @@
         }
 
         @media print {
-            .dataTables_filter, footer, .example1_paginate, .example1_info {
-                display: none;
-            }
-
-            table {
-                border-collapse: collapse !important;
-                border:1px solid #dee2e6;
-
-            }
         }
     </style>
 @endpush
@@ -137,7 +128,8 @@
                     <div class="col-12 col-lg-2">
                         <div class="form-group">
                             <label>Department</label>
-                            <select id="department" name="department" class="form-control select2bs4" style="width: 100%;">
+                            <select id="department" name="department" class="form-control select2bs4"
+                                    style="width: 100%;">
                                 <option value="">Select a Department</option>
                                 @foreach(fetchDepartment() as $query)
                                     <option @if(request()->get('department') == $query->department)  selected @endif
@@ -172,8 +164,24 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
+
                     <div class="card-header">
-                        <h3 class="card-title">{{ $title }}</h3>
+                        <h3 class="card-title float-lg-left d-lg-flex align-items-lg-center">
+                            {{ $title }}
+                            @if(request()->department)
+                                of {{ request()->department }}
+                            @endif
+                            @if(request()->date_from)
+                                from {{ request()->date_from }}-{{ request()->month }}-{{ request()->year }}
+                            @endif
+                            @if(request()->date_to)
+                                to {{ request()->date_to }}-{{ request()->month }}-{{ request()->year }}
+                            @endif
+                        </h3>
+                        <a href="{{ str_replace(request()->segment(3), 'generate-pdf', url()->full()) }}"
+                           class="btn btn-secondary btn-sm float-lg-right">
+                            PDF
+                        </a>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
@@ -201,9 +209,8 @@
                                         $departmentCounters[$currentDepartment] = 0; // Reset the department-specific counter
                                     @endphp
                                     <tr>
-                                        <td colspan="4" class="text-danger bg-danger"><strong>{{ $departmentId }} - {{ $currentDepartment }}</strong></td>
-                                        <td class="d-none d-print-none"></td>
-                                        <td class="d-none d-print-none"></td>
+                                        <td colspan="4" class="text-danger bg-danger"><strong>{{ $departmentId }}
+                                                - {{ $currentDepartment }}</strong></td>
                                     </tr>
                                 @endif
                                 <tr>
@@ -231,19 +238,19 @@
 @endsection
 
 @push('js')
-    <!-- DataTables  & Plugins -->
-    <script src="{{ asset('admin/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('admin/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('admin/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('admin/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('admin/plugins/jszip/jszip.min.js') }}"></script>
-    <script src="{{ asset('admin/plugins/pdfmake/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('admin/plugins/pdfmake/vfs_fonts.js') }}"></script>
-    <script src="{{ asset('admin/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-    <script src="{{ asset('admin/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('admin/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+    {{--    <!-- DataTables  & Plugins -->--}}
+    {{--    <script src="{{ asset('admin/plugins/datatables/jquery.dataTables.min.js') }}"></script>--}}
+    {{--    <script src="{{ asset('admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>--}}
+    {{--    <script src="{{ asset('admin/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>--}}
+    {{--    <script src="{{ asset('admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>--}}
+    {{--    <script src="{{ asset('admin/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>--}}
+    {{--    <script src="{{ asset('admin/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>--}}
+    {{--    <script src="{{ asset('admin/plugins/jszip/jszip.min.js') }}"></script>--}}
+    {{--    <script src="{{ asset('admin/plugins/pdfmake/pdfmake.min.js') }}"></script>--}}
+    {{--    <script src="{{ asset('admin/plugins/pdfmake/vfs_fonts.js') }}"></script>--}}
+    {{--    <script src="{{ asset('admin/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>--}}
+    {{--    <script src="{{ asset('admin/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>--}}
+    {{--    <script src="{{ asset('admin/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>--}}
     <script>
         $(function () {
             $("#datepicker_from, #datepicker_to").datepicker({dateFormat: 'dd', defaultDate: new Date(2019, 11, 1)});
@@ -264,17 +271,27 @@
     </script>
 
     <!-- Page specific script -->
-    <script>
-        $(document).ready(function () {
-            $('#example1').DataTable({
-                "responsive": true,
-                "lengthChange": false,
-                "autoWidth": false,
-                "paging": false,
-                "info": false,
-                "ordering": false,
-            });
-        });
-    </script>
+    {{--    <script>--}}
+    {{--        $(document).ready(function () {--}}
+    {{--            $('#example1').DataTable({--}}
+    {{--                "responsive": true,--}}
+    {{--                "lengthChange": false,--}}
+    {{--                "autoWidth": false,--}}
+    {{--                "paging": false,--}}
+    {{--                "info": false,--}}
+    {{--                "ordering": false,--}}
+    {{--            });--}}
+    {{--        });--}}
+    {{--    </script>--}}
+
+    {{--    <script>--}}
+    {{--        document.getElementById('generatePdfButton').addEventListener('click', function() {--}}
+    {{--            generatePdf();--}}
+    {{--        });--}}
+
+    {{--        function generatePdf() {--}}
+    {{--            window.location.href = '{{ route("generate-pdf") }}';--}}
+    {{--        }--}}
+    {{--    </script>--}}
 
 @endpush

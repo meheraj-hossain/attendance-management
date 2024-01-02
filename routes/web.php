@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\EmployeeController;
 use \App\Http\Controllers\UserController;
 use \App\Http\Controllers\ReportController;
+use \App\Http\Controllers\PdfController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,5 +50,6 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
         Route::get('reports/monthly-attendance2', [
             ReportController::class, 'monthly_attendance2'
         ])->name('reports.monthly.attendance2');
+        Route::get('reports/generate-pdf', [PdfController::class, 'generate_pdf'])->name('generate-pdf');
     });
 });
