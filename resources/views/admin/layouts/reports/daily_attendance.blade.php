@@ -51,8 +51,7 @@
                             <label>Date From:</label>
                             <input type="text" id="datepicker_from" name="date_from"
                                    value="{{ request()->get('date_from') }}"
-                                   class="form-control"
-                                   id="date_from">
+                                   class="form-control">
                         </div>
                     </div>
                     <div class="col-12 col-lg-2">
@@ -60,8 +59,7 @@
                             <label>Date To:</label>
                             <input type="text" id="datepicker_to" name="date_to"
                                    value="{{ request()->get('date_to') }}"
-                                   class="form-control"
-                                   id="date_to">
+                                   class="form-control">
                         </div>
                     </div>
                     <div class="col-12 col-lg-2">
@@ -142,7 +140,7 @@
                     </div>
                     <div class="col-12 col-lg-1">
                         <div class="form-group">
-                            <label class="invisible">Search</label>
+                            <label class="d-none d-lg-block">Search</label>
                             <button type="submit" class="form-control btn btn-info">
                                 <i class="fas fa-search"></i>
                                 Search
@@ -151,7 +149,7 @@
                     </div>
                     <div class="col-12 col-lg-1">
                         <div class="form-group">
-                            <label class="invisible">Refresh</label>
+                            <label class="d-none d-lg-block">Refresh</label>
                             <a href="{{ route('reports.daily.attendance') }}"
                                class="form-control btn btn-danger">
                                 <i class="fas fa-sync-alt"></i>
@@ -291,6 +289,7 @@
     <script>
         $(function () {
             $('#example1').DataTable({
+                "responsive": true, "lengthChange": false, "autoWidth": false, "pageLength": 100,
                 dom: 'Bfrtip',
                 buttons: [
                     {
