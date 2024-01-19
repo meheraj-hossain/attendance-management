@@ -237,14 +237,14 @@ class ReportController extends Controller
                 return redirect()->back();
             }
         }
-        $data['title']                    = ($request->year && $request->month) ? 'Daily Attendance Report in ' . date('F', mktime(0, 0, 0, $request->month, 1)) . '-' . $request->year : 'Daily Attendance Report in ' . date('F-Y');
-        if(request()->department) {
+        $data['title'] = ($request->year && $request->month) ? 'Daily Attendance Report in ' . date('F', mktime(0, 0, 0, $request->month, 1)) . '-' . $request->year : 'Daily Attendance Report in ' . date('F-Y');
+        if (request()->department) {
             $data['title'] .= ' of ' . request()->department;
         }
-        if(request()->date_from) {
+        if (request()->date_from) {
             $data['title'] .= ' from ' . request()->date_from . '-' . request()->month . '-' . request()->year;
         }
-        if(request()->date_to) {
+        if (request()->date_to) {
             $data['title'] .= ' to ' . request()->date_to . '-' . request()->month . '-' . request()->year;
         }
         $data['daily_attendance_reports'] = $query;
@@ -307,15 +307,19 @@ class ReportController extends Controller
                 return redirect()->back();
             }
         }
-        $data['title']            = 'User Attendance Report';
-        if(request()->user_id) {
+        $data['title'] = 'User Attendance Report';
+        if (request()->user_id) {
             $data['title'] .= ' of ' . fetchUserById(request()->user_id);
         }
-        if(request()->date_from) {
+        if (request()->date_from) {
             $data['title'] .= ' from ' . request()->date_from . '-' . request()->month . '-' . request()->year;
         }
-        if(request()->date_to) {
+        if (request()->date_to) {
             $data['title'] .= ' to ' . request()->date_to . '-' . request()->month . '-' . request()->year;
+        }
+
+        if ($request->month && $request->year) {
+            $data['title'] .= ' in ' . date('F', mktime(0, 0, 0, $request->month, 1)) . '-' . $request->year;
         }
 
         $data['users_attendance'] = $query;
