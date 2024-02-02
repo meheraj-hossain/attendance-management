@@ -80,12 +80,12 @@ return [
 
         'odbc' => [
             'driver'   => 'odbc',
-            'dsn'      => 'sqlsrv:Server=DESKTOP-5817L5Q,1433;Database=UCDB',
+            'dsn'      => env('ODBC_DSN'),
             'host'     => '',
             'port'     => '',
-            'database' => 'UCDB',
-            'username' => 'sa',
-            'password' => 'bat1#',
+            'database' => '',
+            'username' => env('ODBC_USERNAME', ''),
+            'password' => env('ODBC_PASSWORD', ''),
         ],
 
     ],
