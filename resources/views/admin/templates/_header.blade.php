@@ -22,8 +22,9 @@
                 <span class="dropdown-item dropdown-header">
                     {{ \App\Models\User::ROLE[\Illuminate\Support\Facades\Auth::user()->role] }}
                 </span>
-{{--                <div class="dropdown-divider"></div>--}}
-                <a href="#" class="btn btn-danger btn-sm my-2 d-flex justify-content-center" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                {{--                <div class="dropdown-divider"></div>--}}
+                <a href="#" class="btn btn-danger btn-sm my-2 d-flex justify-content-center"
+                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <i class=""></i> Logout
                 </a>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
