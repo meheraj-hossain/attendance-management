@@ -80,6 +80,16 @@
                         </li>
 
                         <li class="nav-item ">
+                            <a href="{{ route('reports.monthly.attendance.date.wise') }}"
+                               class="nav-link {{ ( request()->routeIs('reports.monthly.attendance.date.wise')) ? 'active' : null  }}">
+                                <i class="fas fa-calendar-alt  nav-icon"></i>
+                                <p>
+                                    Monthly Attendance Date Wise
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item ">
                             <a href="{{ route('reports.daily.attendance') }}"
                                class="nav-link {{ ( request()->routeIs('reports.daily.attendance')) ? 'active' : null  }}">
                                 <i class="fab fa-dailymotion  nav-icon"></i>

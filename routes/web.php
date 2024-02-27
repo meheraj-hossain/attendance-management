@@ -39,6 +39,10 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
             ReportController::class, 'monthly_attendance'
         ])->name('reports.monthly.attendance');
 
+        Route::get('reports/monthly-attendance-date-wise', [
+            ReportController::class, 'monthly_attendance_date_wise'
+        ])->name('reports.monthly.attendance.date.wise');
+
         Route::get('reports/daily-attendance', [
             ReportController::class, 'daily_attendance'
         ])->name('reports.daily.attendance');
@@ -51,5 +55,6 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
             ReportController::class, 'monthly_attendance2'
         ])->name('reports.monthly.attendance2');
         Route::get('reports/generate-pdf', [PdfController::class, 'generate_pdf'])->name('generate-pdf');
+        Route::get('reports/generate-monthly-attendance-date-wise-pdf', [PdfController::class, 'generate_monthly_attendance_date_wise_pdf'])->name('generate-monthly-attendance-date-wise-pdf');
     });
 });
