@@ -280,6 +280,13 @@
                         </div>
 
                         <div class="col-12 d-flex justify-content-center align-items-center my-3">
+                            <label style="width: 45%">Day:</label>
+                            <input type="text" id="modal-day"
+                                   value="" readonly
+                                   class="form-control ml-2">
+                        </div>
+
+                        <div class="col-12 d-flex justify-content-center align-items-center my-3">
                             <label style="width: 45%">In Time:</label>
                             <input type="text" id="modal-in-time"
                                    value="" readonly
@@ -348,11 +355,10 @@
                 var month = $('#month').val();
                 if (!month) {
                     var currentMonth = new Date().getMonth() + 1; // Months are zero-based
-                    var formattedMonth = new Date().toLocaleString('en-US', { month: '2-digit' });
+                    var formattedMonth = new Date().toLocaleString('en-US', {month: '2-digit'});
                     $('#month').val(formattedMonth);
                     month = formattedMonth;
                 }
-
 
                 $.ajax({
                     url: '{{ route('get-employees-info-by-date') }}',
@@ -377,6 +383,10 @@
                             minute: "2-digit",
                             hour12: true
                         });
+                        var customDate = new Date(year, month - 1, date);
+                        var dayOfWeek = customDate.getDay();
+                        var weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                        var dayName = weekdays[dayOfWeek];
                         var modifiedInTime = response[0].modified_in_time;
                         var modifiedOutTime = response[0].modified_out_time;
                         var outTimeObj = new Date("1970-01-01T" + modifiedOutTime + "Z");
@@ -398,8 +408,9 @@
                             hour12: true
                         });
 
-                        $('.modal-title').html(userName);
-                        $('#modal-date').val(date + '-' + month + '-' + year);
+                        $('.modal-title').html(userName + ' - ' + department);
+                        $('#modal-date').val(month + '/' + date + '/' + year);
+                        $('#modal-day').val(dayName);
                         $('#modal-in-time').val(formattedInTime);
                         $('#modal-out-time').val(formattedCalculatedOutTime);
                         $('#modal-total-hour-worked').val(hours + " hours " + minutes + " minutes");
