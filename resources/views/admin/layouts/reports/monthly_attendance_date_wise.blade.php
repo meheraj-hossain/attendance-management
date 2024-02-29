@@ -348,9 +348,11 @@
                 var month = $('#month').val();
                 if (!month) {
                     var currentMonth = new Date().getMonth() + 1; // Months are zero-based
-                    $('#month').val(currentMonth);
-                    month = currentMonth;
+                    var formattedMonth = new Date().toLocaleString('en-US', { month: '2-digit' });
+                    $('#month').val(formattedMonth);
+                    month = formattedMonth;
                 }
+
 
                 $.ajax({
                     url: '{{ route('get-employees-info-by-date') }}',
