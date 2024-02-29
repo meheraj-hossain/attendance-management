@@ -342,7 +342,8 @@
         $(document).ready(function () {
             $('td').click(function () {
                 var userId = $(this).data('user-id');
-                var date = $(this).data('date');
+                var initialDate = $(this).data('date');
+                var date = initialDate.toString().padStart(2, '0');
                 var userName = $(this).data('user-name');
                 var department = $(this).data('department');
                 var daysAttended = $(this).data('days-attended');
@@ -359,6 +360,13 @@
                     $('#month').val(formattedMonth);
                     month = formattedMonth;
                 }
+                var customDate = new Date(year, month - 1, date);
+                var dayOfWeek = customDate.getDay();
+                var weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                var dayName = weekdays[dayOfWeek];
+
+                var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                var monthName = monthNames[month - 1];
 
                 $.ajax({
                     url: '{{ route('get-employees-info-by-date') }}',
@@ -373,47 +381,55 @@
                         days_attended: daysAttended
                     },
                     success: function (response) {
-                        var inTime = response[0].in_time;
-                        var dateObj = new Date(inTime);
-                        var formattedInTime = dateObj.toLocaleTimeString('en-US', {
-                            year: "numeric",
-                            month: "2-digit",
-                            day: "2-digit",
-                            hour: "numeric",
-                            minute: "2-digit",
-                            hour12: true
-                        });
-                        var customDate = new Date(year, month - 1, date);
-                        var dayOfWeek = customDate.getDay();
-                        var weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-                        var dayName = weekdays[dayOfWeek];
-                        var modifiedInTime = response[0].modified_in_time;
-                        var modifiedOutTime = response[0].modified_out_time;
-                        var outTimeObj = new Date("1970-01-01T" + modifiedOutTime + "Z");
-                        var inTimeObj = new Date("1970-01-01T" + modifiedInTime + "Z");
-                        var timeDifference = outTimeObj - inTimeObj;
-                        var hours = Math.floor(timeDifference / (1000 * 60 * 60));
-                        var minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+                        if (response && response.length > 0) {
+                            var inTime = response[0].in_time;
+                            var dateObj = new Date(inTime);
+                            var formattedInTime = dateObj.toLocaleTimeString('en-US', {
+                                year: "numeric",
+                                month: "long",
+                                day: "2-digit",
+                                hour: "numeric",
+                                minute: "2-digit",
+                                hour12: true
+                            });
+                            var modifiedInTime = response[0].modified_in_time;
+                            var modifiedOutTime = response[0].modified_out_time;
+                            var outTimeObj = new Date("1970-01-01T" + modifiedOutTime + "Z");
+                            var inTimeObj = new Date("1970-01-01T" + modifiedInTime + "Z");
+                            var timeDifference = outTimeObj - inTimeObj;
+                            var hours = Math.floor(timeDifference / (1000 * 60 * 60));
+                            var minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
 
-                        var newDateObj = new Date(dateObj);
-                        newDateObj.setHours(dateObj.getHours() + hours);
-                        newDateObj.setMinutes(dateObj.getMinutes() + minutes);
+                            var newDateObj = new Date(dateObj);
+                            newDateObj.setHours(dateObj.getHours() + hours);
+                            newDateObj.setMinutes(dateObj.getMinutes() + minutes);
 
-                        var formattedCalculatedOutTime = newDateObj.toLocaleTimeString('en-US', {
-                            year: "numeric",
-                            month: "2-digit",
-                            day: "2-digit",
-                            hour: "numeric",
-                            minute: "2-digit",
-                            hour12: true
-                        });
+                            var formattedCalculatedOutTime = newDateObj.toLocaleTimeString('en-US', {
+                                year: "numeric",
+                                month: "long",
+                                day: "2-digit",
+                                hour: "numeric",
+                                minute: "2-digit",
+                                hour12: true
+                            });
 
-                        $('.modal-title').html(userName + ' - ' + department);
-                        $('#modal-date').val(month + '/' + date + '/' + year);
-                        $('#modal-day').val(dayName);
-                        $('#modal-in-time').val(formattedInTime);
-                        $('#modal-out-time').val(formattedCalculatedOutTime);
-                        $('#modal-total-hour-worked').val(hours + " hours " + minutes + " minutes");
+                            $('.modal-title').html(userName + ' - ' + department);
+                            $('#modal-date').val(monthName + ' ' + date + ',' + year);
+                            $('#modal-day').val(dayName);
+                            $('#modal-in-time').val(formattedInTime);
+                            $('#modal-out-time').val(formattedCalculatedOutTime);
+                            $('#modal-total-hour-worked').val(hours + " hours " + minutes + " minutes");
+
+                            // Open your modal here
+                        } else {
+                            $('.modal-title').html(userName + ' - ' + department);
+                            $('#modal-date').val(monthName + ' ' + date + ',' + year);
+                            $('#modal-day').val(dayName);
+                            $('#modal-in-time').val("No Data Available");
+                            $('#modal-out-time').val("No Data Available");
+                            $('#modal-total-hour-worked').val("No Data Available");
+                        }
+
                     }
                 });
             });
