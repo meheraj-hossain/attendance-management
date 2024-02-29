@@ -84,7 +84,7 @@
                                class="nav-link {{ ( request()->routeIs('reports.monthly.attendance.date.wise')) ? 'active' : null  }}">
                                 <i class="fas fa-calendar-alt  nav-icon"></i>
                                 <p>
-                                    Monthly Attendance Date Wise
+                                    Monthly Report By Date
                                 </p>
                             </a>
                         </li>

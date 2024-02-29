@@ -198,7 +198,7 @@
                     <!-- /.card-header -->
                     <div class="card-body">
                         <table id="example1" class="table table-striped table-bordered">
-                            <thead>
+                            <thead style="position: sticky;top: 0; background:wheat;">
                             <tr>
                                 <th>Sl</th>
                                 <th>User ID</th>
@@ -228,14 +228,18 @@
                                                 - {{ $currentDepartment }}</strong></td>
                                     </tr>
                                 @endif
-                                <tr>
+                                <tr id="{{ $item->user_id }}">
                                     <td>
                                         {{ ++$departmentCounters[$currentDepartment] }}
                                     </td>
                                     <td>{{ $item->user_id }}</td>
                                     <td><b>{{ fetchUserById($item->user_id) ?? 'NOT AVAILABLE' }}</b></td>
                                     @for($i = 1; $i <= $daysCount; $i++)
-                                        <td>
+                                        <td data-toggle="modal" data-target="#modal-default"
+                                            data-user-id="{{ $item->user_id }}" data-date="{{ $i }}"
+                                            data-user-name="{{ fetchUserById($item->user_id) }}"
+                                            data-department="{{ $item->department }}"
+                                            data-days-attended="{{ $item->days_attended }}">
                                             @if(property_exists($item, $i))
                                                 @if($item->{$i} == 'present')
                                                     <i class="fas fa-check"></i>
@@ -255,25 +259,60 @@
             <!-- /.col -->
         </div>
         <!-- /.row -->
-
     </form>
 
+    <div class="modal fade" id="modal-default">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-center align-items-center my-3">
+                            <label style="width: 45%">Date:</label>
+                            <input type="text" id="modal-date"
+                                   value="" readonly
+                                   class="form-control ml-2">
+                        </div>
+
+                        <div class="col-12 d-flex justify-content-center align-items-center my-3">
+                            <label style="width: 45%">In Time:</label>
+                            <input type="text" id="modal-in-time"
+                                   value="" readonly
+                                   class="form-control ml-2">
+                        </div>
+
+                        <div class="col-12 d-flex justify-content-center align-items-center my-3">
+                            <label style="width: 45%">Out Time:</label>
+                            <input type="text" id="modal-out-time"
+                                   value="" readonly
+                                   class="form-control ml-2">
+                        </div>
+
+                        <div class="col-12 d-flex justify-content-center align-items-center my-3">
+                            <label style="width: 45%">Total Hour Worked:</label>
+                            <input type="text" id="modal-total-hour-worked"
+                                   value="" readonly
+                                   class="form-control ml-2">
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-end">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
 @endsection
 
 @push('js')
-    {{--    <!-- DataTables  & Plugins -->--}}
-    {{--    <script src="{{ asset('admin/plugins/datatables/jquery.dataTables.min.js') }}"></script>--}}
-    {{--    <script src="{{ asset('admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>--}}
-    {{--    <script src="{{ asset('admin/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>--}}
-    {{--    <script src="{{ asset('admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>--}}
-    {{--    <script src="{{ asset('admin/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>--}}
-    {{--    <script src="{{ asset('admin/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>--}}
-    {{--    <script src="{{ asset('admin/plugins/jszip/jszip.min.js') }}"></script>--}}
-    {{--    <script src="{{ asset('admin/plugins/pdfmake/pdfmake.min.js') }}"></script>--}}
-    {{--    <script src="{{ asset('admin/plugins/pdfmake/vfs_fonts.js') }}"></script>--}}
-    {{--    <script src="{{ asset('admin/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>--}}
-    {{--    <script src="{{ asset('admin/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>--}}
-    {{--    <script src="{{ asset('admin/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>--}}
     <script>
         $(function () {
             $("#datepicker_from, #datepicker_to").datepicker({dateFormat: 'dd', defaultDate: new Date(2019, 11, 1)});
@@ -292,7 +331,81 @@
         });
 
     </script>
+    <script>
+        $(document).ready(function () {
+            $('td').click(function () {
+                var userId = $(this).data('user-id');
+                var date = $(this).data('date');
+                var userName = $(this).data('user-name');
+                var department = $(this).data('department');
+                var daysAttended = $(this).data('days-attended');
+                var year = $('#year').val();
+                if (!year) {
+                    var currentYear = new Date().getFullYear();
+                    $('#year').val(currentYear);
+                    year = currentYear;
+                }
+                var month = $('#month').val();
+                if (!month) {
+                    var currentMonth = new Date().getMonth() + 1; // Months are zero-based
+                    $('#month').val(currentMonth);
+                    month = currentMonth;
+                }
 
+                $.ajax({
+                    url: '{{ route('get-employees-info-by-date') }}',
+                    type: 'GET',
+                    data: {
+                        user_id: userId,
+                        date: date,
+                        month: month,
+                        year: year,
+                        user_name: userName,
+                        department: department,
+                        days_attended: daysAttended
+                    },
+                    success: function (response) {
+                        var inTime = response[0].in_time;
+                        var dateObj = new Date(inTime);
+                        var formattedInTime = dateObj.toLocaleTimeString('en-US', {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                            hour: "numeric",
+                            minute: "2-digit",
+                            hour12: true
+                        });
+                        var modifiedInTime = response[0].modified_in_time;
+                        var modifiedOutTime = response[0].modified_out_time;
+                        var outTimeObj = new Date("1970-01-01T" + modifiedOutTime + "Z");
+                        var inTimeObj = new Date("1970-01-01T" + modifiedInTime + "Z");
+                        var timeDifference = outTimeObj - inTimeObj;
+                        var hours = Math.floor(timeDifference / (1000 * 60 * 60));
+                        var minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+
+                        var newDateObj = new Date(dateObj);
+                        newDateObj.setHours(dateObj.getHours() + hours);
+                        newDateObj.setMinutes(dateObj.getMinutes() + minutes);
+
+                        var formattedCalculatedOutTime = newDateObj.toLocaleTimeString('en-US', {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                            hour: "numeric",
+                            minute: "2-digit",
+                            hour12: true
+                        });
+
+                        $('.modal-title').html(userName);
+                        $('#modal-date').val(date + '-' + month + '-' + year);
+                        $('#modal-in-time').val(formattedInTime);
+                        $('#modal-out-time').val(formattedCalculatedOutTime);
+                        $('#modal-total-hour-worked').val(hours + " hours " + minutes + " minutes");
+                    }
+                });
+            });
+        });
+    </script>
     <!-- Page specific script -->
     {{--    <script>--}}
     {{--        $(document).ready(function () {--}}

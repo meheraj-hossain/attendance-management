@@ -187,7 +187,7 @@ class ReportController extends Controller
             }
         }
 
-        $data['title']                      = ($request->year && $request->month) ? 'Monthly Attendance Report in ' . date('F', mktime(0, 0, 0, $request->month, 1)) . '-' . $request->year : 'Monthly Attendance Report in ' . date('F-Y');
+        $data['title']                      = ($request->year && $request->month) ? 'Date Wise Monthly Attendance Report in ' . date('F', mktime(0, 0, 0, $request->month, 1)) . '-' . $request->year : 'Date Wise Monthly Attendance Report in ' . date('F-Y');
         $data['monthly_attendance_reports'] = $query;
 //        dd($data['monthly_attendance_reports']);
 
@@ -287,9 +287,9 @@ class ReportController extends Controller
             al.user_id,
             u.department,
             CAST(DATEADD(HOUR, -6, al.event_time) AS DATE) AS modified_event_time,
-            MIN(CASE WHEN al.terminal_name = 'FACE IN' THEN DATEADD(HOUR, -6, al.event_time) ELSE NULL END) AS modified_in_time,
-            MAX(CASE WHEN al.terminal_name = 'FACE Out' THEN DATEADD(HOUR, -6, al.event_time) ELSE NULL END) AS modified_out_time,
-            MIN(CASE WHEN al.terminal_name = 'FACE IN' THEN al.event_time ELSE NULL END) AS in_time,
+            MIN(CAST(DATEADD(HOUR, -6, event_time) AS TIME)) AS modified_in_time,
+            MAX(CAST(DATEADD(HOUR, -6, event_time) AS TIME)) AS modified_out_time,
+            MIN(event_time) AS in_time,
             COUNT(CASE WHEN al.terminal_name = 'FACE IN' THEN 1 END) AS total_in_count,
             COUNT(CASE WHEN al.terminal_name = 'FACE Out' THEN 1 END) AS total_out_count
         FROM
@@ -314,9 +314,9 @@ class ReportController extends Controller
             al.user_id,
             u.department,
             CAST(DATEADD(HOUR, -6, al.event_time) AS DATE) AS modified_event_time,
-            MIN(CASE WHEN al.terminal_name = 'FACE IN' THEN DATEADD(HOUR, -6, al.event_time) ELSE NULL END) AS modified_in_time,
-            MAX(CASE WHEN al.terminal_name = 'FACE Out' THEN DATEADD(HOUR, -6, al.event_time) ELSE NULL END) AS modified_out_time,
-            MIN(CASE WHEN al.terminal_name = 'FACE IN' THEN al.event_time ELSE NULL END) AS in_time,
+            MIN(CAST(DATEADD(HOUR, -6, event_time) AS TIME)) AS modified_in_time,
+            MAX(CAST(DATEADD(HOUR, -6, event_time) AS TIME)) AS modified_out_time,
+            MIN(event_time) AS in_time,
             COUNT(CASE WHEN al.terminal_name = 'FACE IN' THEN 1 END) AS total_in_count,
             COUNT(CASE WHEN al.terminal_name = 'FACE Out' THEN 1 END) AS total_out_count
         FROM
@@ -382,9 +382,9 @@ class ReportController extends Controller
     SELECT
         user_id,
         CAST(DATEADD(HOUR, -6, event_time) AS DATE) AS modified_event_time,
-        MIN(CASE WHEN terminal_name = 'FACE IN' THEN DATEADD(HOUR, -6, event_time) ELSE NULL END) AS modified_in_time,
-        MAX(CASE WHEN terminal_name = 'FACE Out' THEN DATEADD(HOUR, -6, event_time) ELSE NULL END) AS modified_out_time,
-        MIN(CASE WHEN terminal_name = 'FACE IN' THEN event_time ELSE NULL END) AS in_time,
+        MIN(CAST(DATEADD(HOUR, -6, event_time) AS TIME)) AS modified_in_time,
+        MAX(CAST(DATEADD(HOUR, -6, event_time) AS TIME)) AS modified_out_time,
+        MIN(event_time) AS in_time,
         COUNT(CASE WHEN terminal_name = 'FACE IN' THEN 1 END) AS total_in_count,
         COUNT(CASE WHEN terminal_name = 'FACE Out' THEN 1 END) AS total_out_count
     FROM
@@ -450,4 +450,54 @@ GROUP BY a.user_id, u.department ORDER BY u.department, a.user_id ASC"
         return view('admin.layouts.reports.monthly_attendance2', $data);
     }
 
+    public function get_employees_info_by_date(Request $request)
+    {
+        $date = $request->date;
+        $userId = $request->user_id;
+        $month = $request->month;
+        $year = $request->year;
+        $yearMonth    = $year . $month;
+        $databaseName = 'auth_logs_' . $yearMonth;
+
+        $query = DB::connection('odbc')->select("
+    SELECT
+        user_id,
+        CAST(DATEADD(HOUR, -6, event_time) AS DATE) AS modified_event_time,
+        MIN(CAST(DATEADD(HOUR, -6, event_time) AS TIME)) AS modified_in_time,
+        MAX(CAST(DATEADD(HOUR, -6, event_time) AS TIME)) AS modified_out_time,
+        MIN(event_time) AS in_time
+    FROM
+        $databaseName
+    WHERE user_name <> ''
+    AND DAY(CAST(DATEADD(HOUR, -6, event_time) AS DATE)) = $date
+    AND user_id = $userId
+    GROUP BY
+        user_id, CAST(DATEADD(HOUR, -6, event_time) AS DATE)
+    ORDER BY
+        user_id
+");
+        return $query;
+    }
+
+
+//    user attendance query with terminal
+//$query = DB::connection('odbc')->select("
+//    SELECT
+//        user_id,
+//        CAST(DATEADD(HOUR, -6, event_time) AS DATE) AS modified_event_time,
+//        MIN(CASE WHEN terminal_name = 'FACE IN' THEN DATEADD(HOUR, -6, event_time) ELSE NULL END) AS modified_in_time,
+//        MAX(CASE WHEN terminal_name = 'FACE Out' THEN DATEADD(HOUR, -6, event_time) ELSE NULL END) AS modified_out_time,
+//        MIN(CASE WHEN terminal_name = 'FACE IN' THEN event_time ELSE NULL END) AS in_time,
+//        COUNT(CASE WHEN terminal_name = 'FACE IN' THEN 1 END) AS total_in_count,
+//        COUNT(CASE WHEN terminal_name = 'FACE Out' THEN 1 END) AS total_out_count
+//    FROM
+//        $databaseName
+//    WHERE user_name <> ''
+//    $dateQuery
+//    $userQuery
+//    GROUP BY
+//        user_id, CAST(DATEADD(HOUR, -6, event_time) AS DATE)
+//    ORDER BY
+//        user_id
+//");
 }

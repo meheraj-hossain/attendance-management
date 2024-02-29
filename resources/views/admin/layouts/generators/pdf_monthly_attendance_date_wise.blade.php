@@ -31,6 +31,7 @@
         #table td {
             padding: .5rem;
             vertical-align: top;
+            font-size: 15px;
         }
 
         #table th {
@@ -38,6 +39,7 @@
             border: 1px solid #dee2e6;
             vertical-align: bottom;
             border-bottom-width: 2px;
+            font-size: 15px;
         }
 
         #search-info tr:nth-child(odd) {
@@ -165,4 +167,3 @@
 </div>
 </body>
 </html>
-
